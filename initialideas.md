@@ -24,3 +24,16 @@ How to begin making the game ->
 - Functions to take damage ---> if shield on, reduce SP, else reduce HP ++ % chance to damage a random module. Damaged modules will stop functioning.
 - Functions to repair different module (or rooms). Should take a few seconds to repair. Can only repair one room at a time. Modules will only function again once it is repaired. Cool down will go back to full. 
 - Functions for Defense module --> % chance to intercept enemy fire. If damaged, will not intercept.
+
+MVP 
+- Stage 1
+-> Get Weapons to work first. Then two spaceships will start shooting at each other mindlessly. 
+
+- Stage 2
+-> Get repair function online. So players would actually be able to do something.
+
+- Stage 3
+-> Get Shields to work. If it works, two spaceships with shields will start shooting at each other.
+
+- Stage 4
+-> Get Defense mods to work, so not all attacks will hit its target.
