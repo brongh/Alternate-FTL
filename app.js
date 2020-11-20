@@ -1,7 +1,6 @@
-const character = {
+const player = {
     'hp': 0,
-    'attack':0,
-    'speed': 0
+    'sp': 0
 }
 
 
