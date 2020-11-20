@@ -33,10 +33,20 @@ MVP
 -> Get Weapons to work first. Then two spaceships will start shooting at each other mindlessly. 
 
 - Stage 2
--> Get repair function online. So players would actually be able to do something.
-
-- Stage 3
 -> Get Shields to work. If it works, two spaceships with shields will start shooting at each other.
 
-- Stage 4
+- Stage 3
 -> Get Defense mods to work, so not all attacks will hit its target.
+
+- Stage 4
+-> Get damaged status online. Meaning: damaged modules wouldn't work.
+
+- Stage 5
+-> Get repair function online. So players would actually be able to do something.
+
+Progress
+- Stage 1 - completed
+- Stage 2 - completed
+- stage 3 - completed
+- stage 4 - completed
+- additional functions --> added random damage modifier to randomise damage dealt. e.g. 100 damge +/- 20%.
