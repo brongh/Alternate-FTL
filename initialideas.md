@@ -1,9 +1,6 @@
-render --> weaponTriggerP + weaponTriggerC 
+grid:
 
+y axis mid point: 13
 
-
-weaponTriggerP --> fireWeaponP
-
-
-
-weaponTriggerC --> fireWeaponC
+space ship grid. starting: 4
+ending: 16

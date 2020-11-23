@@ -1,0 +1,14 @@
+div {
+    border: 1px solid grey;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: repeat(25, 1fr);
+    grid-template-rows: repeat(25,1fr);
+    width: 700px;
+    height: 500px;;
+    margin: 0 auto;
+    text-align: center;
+}
+
