@@ -14,18 +14,21 @@ const player = {
 
 
 // higher defenseRating --> harder to hit. value 1 == 100% hit rate.
-const defenseRatingP = 2;
+const defenseRatingP = 3;
 const fireWeaponP = () => {
     if (defenseModC() === 0) {
         if (computer.sp > 0) {
             PdamageSP = randomModifier(player.damage)
             computer.sp -= PdamageSP;
             shieldC.value -= PdamageSP
+            if (malfunctionChance(shieldOnMalfunctionChance) === 0) {
+                
+            }
             console.log('Enemy status: sp: ' + computer.sp + "| hp: " + computer.hp);
         } else {
             PdamageHP = randomModifier(player.damage);
             computer.hp -= PdamageHP;
-            healthC.value -=PdamageHP;
+            healthC.value -= PdamageHP;
             console.log('Enemy status: sp: ' + computer.sp + "| hp: " + computer.hp);
         }
     } else {
@@ -64,7 +67,7 @@ const computer = {
     'damage': 30
 }
 // higher defenseRating --> harder to hit. value 1 == 100% hit rate.
-const defenseRatingC = 2;
+const defenseRatingC = 3;
 const fireWeaponC = () => {
     if (defenseModP() === 0) {
         if (player.sp > 0) {
@@ -115,7 +118,18 @@ const outcome = () => {
         console.log("Game over... You lost.");
     }
 }
+// random module damage =================================================================
+const shieldOnMalfunctionChance = 5;
+const shieldOffMalfunctionChance = 2;
+const module = ['sp','weapon','defense'];
+const malfunctionChance = (n) => {
+    const chance = Math.floor(Math.random() * n);
+}
+const moduleMalfunctionChance = () => {
+    const chance = Math.floor(Math.random() * module.length);
+}
 
+// damage modifier ======================================================================
 const randomModifier = (d) => {
     const deviation = 2 * d * 0.2;
     const lowestDamage = 0.8 * d;
@@ -129,7 +143,7 @@ const render = () => {
 
 
 $(() => {
-    
+
     // grids id = x1y1 e.g. 
     for (let y = 1; y < 26; y++) {
         for (let x = 1; x < 26; x++) {
@@ -159,7 +173,23 @@ $(() => {
     }
 
     // spaceship computer
-
+    for (let x = 16; x < 25; x++) {
+        for (let y = 3; y < 15; y++) {
+            $('#x' + x + 'y' + y).css('background', 'grey').text('');
+        }
+    }
+    for (let x = 16; x < 23; x++) {
+        $('#x' + x + 'y3').css('background','white');
+    }
+    for (let x = 16; x < 23; x++) {
+        $('#x' + x + 'y14').css('background','white');
+    }
+    for (let x = 16; x < 18; x++) {
+        $('#x' + x + 'y4').css('background','white');
+    }
+    for (let x = 16; x < 18; x++) {
+        $('#x' + x + 'y13').css('background','white');
+    }
 
     // separator for spaceships and status
     for (let x = 1; x < 26; x++) {
@@ -173,39 +203,49 @@ $(() => {
         $('#x2y' + items).text(statusP[i]).css('border', '1px solid black');
     }
     const statusValueP = Object.values(player);
-    for (let i =0; i < statusValueP.length; i++) {
+    for (let i = 0; i < statusValueP.length; i++) {
         const items = 19 + i;
-        $('#x3y' + items).text(statusValueP[i]).css('border','1px solid black');
+        $('#x3y' + items).text(statusValueP[i]).css('border', '1px solid black');
     }
     // hp bar
-    
+
     for (let x = 4; x < 9; x++) {
         $('#x' + x + 'y19').remove();
     }
     $('<progress>').appendTo('#container')
-    .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 19)
-    .attr('value', 100).attr('max', 100).attr('id','healthP');
+        .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 19)
+        .attr('value', 100).attr('max', 100).attr('id', 'healthP');
     // sp bar
     for (let x = 4; x < 9; x++) {
         $('#x' + x + 'y20').remove();
     }
     $('<progress>').appendTo('#container')
-    .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 20)
-    .attr('value', 100).attr('max', 100).attr('id','shieldP');
+        .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 20)
+        .attr('value', 100).attr('max', 100).attr('id', 'shieldP');
     // weapon bar
     for (let x = 4; x < 9; x++) {
         $('#x' + x + 'y21').remove();
     }
-    $('<progress>').appendTo('#container')
-    .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 21)
-    .attr('value', 1).attr('max', 1).attr('id','weaponStatusP');
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 21)
+        .attr('id', 'weaponStatusP').css('font-size','15px');
+    if (player.weapon === 1) {
+        $('#weaponStatusP').text('Functioning');
+    } else {
+        $('#weaponStatusP').text('Click to repair').css('color','red');
+    }
     //defense bar
     for (let x = 4; x < 9; x++) {
         $('#x' + x + 'y22').remove();
     }
-    $('<progress>').appendTo('#container')
-    .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 22)
-    .attr('value', 1).attr('max', 1).attr('id','defenseStatusP');
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 22)
+        .attr('id', 'defenseStatusP').css('font-size','15px');
+    if (player.defense === 1) {
+        $('#defenseStatusP').text('Functioning');
+    } else {
+        $('#defenseStatusP').text('Click to repair').css('color','red');
+    }
 
     // status bars for computer ==========================================================
     const statusC = Object.keys(computer);
@@ -214,9 +254,9 @@ $(() => {
         $('#x18y' + items).text(statusC[i]).css('border', '1px solid black');
     }
     const statusValueC = Object.values(computer);
-    for (let i =0; i < statusValueC.length; i++) {
+    for (let i = 0; i < statusValueC.length; i++) {
         const items = 19 + i;
-        $('#x19y' + items).text(statusValueC[i]).css('border','1px solid black');
+        $('#x19y' + items).text(statusValueC[i]).css('border', '1px solid black');
     }
 
     let healthP = $('#healthP');
@@ -224,34 +264,44 @@ $(() => {
     let defenseStatusP = $('#defenseStatusP');
     let weaponStatusP = $('#weaponStatusP');
     // hp bar
-    
+
     for (let x = 20; x < 25; x++) {
         $('#x' + x + 'y19').remove();
     }
     $('<progress>').appendTo('#container')
-    .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 19)
-    .attr('value', 100).attr('max', 100).attr('id','healthC');
+        .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 19)
+        .attr('value', 100).attr('max', 100).attr('id', 'healthC');
     // sp bar
     for (let x = 20; x < 25; x++) {
         $('#x' + x + 'y20').remove();
     }
     $('<progress>').appendTo('#container')
-    .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 20)
-    .attr('value', 100).attr('max', 100).attr('id','shieldC');
+        .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 20)
+        .attr('value', 100).attr('max', 100).attr('id', 'shieldC');
     // weapon bar
     for (let x = 20; x < 25; x++) {
         $('#x' + x + 'y21').remove();
     }
-    $('<progress>').appendTo('#container')
-    .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
-    .attr('value', 1).attr('max', 1).attr('id','weaponStatusC');
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
+        .attr('id', 'weaponStatusC').css('font-size','15px');
+    if (computer.weapon === 1) {
+        $('#weaponStatusC').text('Functioning');
+    } else {
+        $('#weaponStatusC').text('Click to repair').css('color','red');
+    }
     //defense bar
     for (let x = 20; x < 25; x++) {
         $('#x' + x + 'y22').remove();
     }
-    $('<progress>').appendTo('#container')
-    .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 22)
-    .attr('value', 1).attr('max', 1).attr('id','defenseStatusC');
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 22)
+        .attr('id', 'defenseStatusC').css('font-size','15px');
+    if (computer.defense === 1) {
+        $('#defenseStatusC').text('Functioning');
+    } else {
+        $('#defenseStatusC').text('Click to repair').css('color','red');
+    }
     let healthC = $('#healthC');
     let shieldC = $('#shieldC');
     let defenseStatusC = $('#defenseStatusC');
