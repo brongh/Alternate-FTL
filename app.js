@@ -36,7 +36,8 @@ const randomModifier = (d) => {
 // weapon/defense --> 1 = working, 0 = not working.
 const player = {
     'hp': 100,
-    'sp': 0,
+    'sp': 100,
+    'shield': 1,
     'weapon': 1,
     'defense': 1,
     'damage': 10
@@ -112,6 +113,7 @@ const defenseModC = () => {
 const computer = {
     'hp': 100,
     'sp': 100,
+    'shield': 1,
     'weapon': 1,
     'defense': 1,
     'damage': 10
@@ -270,14 +272,28 @@ $(() => {
             .attr('value', player.sp).attr('max', 100).attr('id', 'shieldP');
         if (player.sp < 1) {
             $('<div>').appendTo('#container')
-            .css('grid-column-start', /////)
+            .css('grid-column-start', )
+        }
+        // shield status
+        if (player.sp > 0) {
+            player.shield = 1;
+        } else if (player.sp < 1) {
+            player.shield = 0;
+        }
+        $('<div>').appendTo('#container')
+        .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 21)
+        .attr('id','shieldStatusP').css('font-size','15px');
+        if (player.shield === 1) {
+            $('#shieldStatusP').text('Functioning');
+        } else {
+            $('#shieldStatusP').text('Click to repair').css('color','red');
         }
         // weapon bar
         for (let x = 4; x < 9; x++) {
             $('#x' + x + 'y21').remove();
         }
         $('<div>').appendTo('#container')
-            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 21)
+            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 22)
             .attr('id', 'weaponStatusP').css('font-size', '15px');
         if (player.weapon === 1) {
             $('#weaponStatusP').text('Functioning');
@@ -289,7 +305,7 @@ $(() => {
             $('#x' + x + 'y22').remove();
         }
         $('<div>').appendTo('#container')
-            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 22)
+            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 23)
             .attr('id', 'defenseStatusP').css('font-size', '15px');
         if (player.defense === 1) {
             $('#defenseStatusP').text('Functioning');
@@ -329,12 +345,21 @@ $(() => {
         $('<progress>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 20)
             .attr('value', computer.sp).attr('max', 100).attr('id', 'shieldC');
+        // shield status
+        $('<div>').appendTo('#container')
+        .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
+        .attr('id','shieldStatusC').css('font-size','15px');
+        if (computer.shield === 1) {
+            $('#shieldStatusC').text('Functioning');
+        } else {
+            $('#shieldStatusC').text('Click to repair').css('color','red');
+        }
         // weapon bar
         for (let x = 20; x < 25; x++) {
             $('#x' + x + 'y21').remove();
         }
         $('<div>').appendTo('#container')
-            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
+            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 22)
             .attr('id', 'weaponStatusC').css('font-size', '15px');
         if (computer.weapon === 1) {
             $('#weaponStatusC').text('Functioning');
@@ -346,7 +371,7 @@ $(() => {
             $('#x' + x + 'y22').remove();
         }
         $('<div>').appendTo('#container')
-            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 22)
+            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 23)
             .attr('id', 'defenseStatusC').css('font-size', '15px');
         if (computer.defense === 1) {
             $('#defenseStatusC').text('Functioning');
@@ -370,9 +395,10 @@ $(() => {
             $(event.target).css('color', 'black');
         })
 
-        $('#shieldP').on('click', (event) => {
-            if (player.sp < 1) {
+        $('#shieldStatusP').on('click', (event) => {
+            if (player.shield !== 1) {
                 player.sp = 100;
+                $(event.target).css('color','black');
             }
         })
 
