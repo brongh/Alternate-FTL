@@ -17,7 +17,7 @@ const outcome = () => {
 // random module damage =================================================================
 const shieldOnMalfunctionChance = 5;
 const shieldOffMalfunctionChance = 2;
-const module = ['sp', 'weapon', 'defense'];
+module = ['sp', 'shield', 'defense'];
 const malfunctionChance = (n) => {
     const chance = Math.floor(Math.random() * n);
     return chance;
@@ -42,8 +42,8 @@ const player = {
     'sp': 100,
     'shield': 1,
     'weapon': 1,
-    'defense': 0,
-    'damage': 10
+    'defense': 1,
+    'damage': 20
 }
 
 
@@ -88,15 +88,9 @@ const fireWeaponP = () => {
     }
 }
 const weaponTriggerP = () => {
-    if (ticker % 5 === 0) {
+    if (ticker % 20 === 0) {
         if (player.weapon === 1) {
             fireWeaponP();
-            if (computer.hp > 0 && player.hp > 0) {
-                setTimeout(weaponTriggerP, 2000);
-            } else if (player.hp > 0) {
-                console.log('You have destroyed your enemy.');
-            }
-
         } else {
             console.log('Weapon module is down! Repair it to fire your weapons,');
         }
@@ -119,7 +113,7 @@ const computer = {
     'shield': 1,
     'weapon': 1,
     'defense': 1,
-    'damage': 10
+    'damage': 20
 }
 // higher defenseRating --> harder to hit. value 1 == 100% hit rate.
 const defenseRatingC = 3;
@@ -162,13 +156,9 @@ const fireWeaponC = () => {
     }
 }
 const weaponTriggerC = () => {
-    if (ticker % 5 === 0) {
+    if (ticker % 25 === 0) {
         if (computer.weapon === 1) {
-            if (player.hp > 0 && computer.hp > 0) {
-                fireWeaponC();
-            } else if (computer.hp > 0) {
-                console.log('You died.');
-            }
+            fireWeaponC();
         } else {
             console.log("Enemy's weapons are down!");
         }
@@ -187,13 +177,9 @@ const defenseModP = () => {
 }
 
 
-
-
-
 $(() => {
-    const render = (timestamp) => {
-        ticker += 1; // global time ticker
-        // =======================================================================================================
+    const staticRender = () => {
+        // STATIC RENDER ========================================================================================
         // grids id = x1y1 e.g. 
         for (let y = 1; y < 26; y++) {
             for (let x = 1; x < 26; x++) {
@@ -222,6 +208,7 @@ $(() => {
             $('#x' + x + 'y13').css('background', 'white');
         }
 
+
         // spaceship computer
         for (let x = 16; x < 25; x++) {
             for (let y = 3; y < 15; y++) {
@@ -240,24 +227,41 @@ $(() => {
         for (let x = 16; x < 18; x++) {
             $('#x' + x + 'y13').css('background', 'white');
         }
+        
+
+
+
         // =====================================================================================================
         // separator for spaceships and status
         for (let x = 1; x < 26; x++) {
             $('#x' + x + 'y17').css('background', 'black').text('');
         }
-
         // hp sp bar for player ================================================================
+
         const statusP = Object.keys(player);
         for (let i = 0; i < statusP.length; i++) {
             const items = 19 + i;
             $('#x2y' + items).text(statusP[i]).css('border', '1px solid black');
         }
+        const statusC = Object.keys(computer);
+        for (let i = 0; i < statusC.length; i++) {
+            const items = 19 + i;
+            $('#x18y' + items).text(statusC[i]).css('border', '1px solid black');
+        }
+    }
+
+    staticRender();
+
+
+    // DYNAMIC RENDER =====================================================================
+    const render = () => {
+        ticker += 1; // global time ticker
+
         const statusValueP = Object.values(player);
         for (let i = 0; i < statusValueP.length; i++) {
             const items = 19 + i;
             $('#x3y' + items).text(statusValueP[i]).css('border', '1px solid black');
         }
-
         // hp bar
 
         for (let x = 4; x < 9; x++) {
@@ -276,12 +280,6 @@ $(() => {
         if (player.sp < 1) {
             $('<div>').appendTo('#container')
                 .css('grid-column-start',)
-        }
-        // shield status
-        if (player.sp > 0) {
-            player.shield = 1;
-        } else if (player.sp < 1 && player.shield !== 2) {
-            player.shield = 0;
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 21)
@@ -321,48 +319,35 @@ $(() => {
         } else {
             $('#defenseStatusP').text('Click to repair').css('color', 'red');
         }
-        let healthP = $('#healthP');
-        let shieldP = $('#shieldP');
-        let defenseStatusP = $('#defenseStatusP');
-        let weaponStatusP = $('#weaponStatusP');
+
+        // shield status
+        if (player.sp > 0) {
+            player.shield = 1;
+        } else if (player.sp < 1 && player.shield !== 2) {
+            player.shield = 0;
+        }
+
 
         // status bars for computer ==========================================================
-        const statusC = Object.keys(computer);
-        for (let i = 0; i < statusC.length; i++) {
-            const items = 19 + i;
-            $('#x18y' + items).text(statusC[i]).css('border', '1px solid black');
-        }
+
         const statusValueC = Object.values(computer);
         for (let i = 0; i < statusValueC.length; i++) {
             const items = 19 + i;
             $('#x19y' + items).text(statusValueC[i]).css('border', '1px solid black');
         }
-
-
         // hp bar
-
         for (let x = 20; x < 25; x++) {
             $('#x' + x + 'y19').remove();
         }
-        $('<progress>').appendTo('#container')
-            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 19)
-            .attr('value', computer.hp).attr('max', 100).attr('id', 'healthC');
         // sp bar
         for (let x = 20; x < 25; x++) {
             $('#x' + x + 'y20').remove();
         }
-        $('<progress>').appendTo('#container')
-            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 20)
-            .attr('value', computer.sp).attr('max', 100).attr('id', 'shieldC');
         // shield status
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
             .attr('id', 'shieldStatusC').css('font-size', '15px');
-        if (computer.shield === 1) {
-            $('#shieldStatusC').text('Functioning');
-        } else {
-            $('#shieldStatusC').text('Click to repair').css('color', 'red');
-        }
+
         // weapon bar
         for (let x = 20; x < 25; x++) {
             $('#x' + x + 'y21').remove();
@@ -370,11 +355,7 @@ $(() => {
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 22)
             .attr('id', 'weaponStatusC').css('font-size', '15px');
-        if (computer.weapon === 1) {
-            $('#weaponStatusC').text('Functioning');
-        } else {
-            $('#weaponStatusC').text('Click to repair').css('color', 'red');
-        }
+
         //defense bar
         for (let x = 20; x < 25; x++) {
             $('#x' + x + 'y22').remove();
@@ -382,36 +363,50 @@ $(() => {
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 23)
             .attr('id', 'defenseStatusC').css('font-size', '15px');
-        if (computer.defense === 1) {
-            $('#defenseStatusC').text('Functioning');
+        $('<progress>').appendTo('#container')
+            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 19)
+            .attr('value', computer.hp).attr('max', 100).attr('id', 'healthC');
+        $('<progress>').appendTo('#container')
+            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 20)
+            .attr('value', computer.sp).attr('max', 100).attr('id', 'shieldC');
+        if (computer.shield === 1) {
+            $('#shieldStatusC').text('Functioning').css('color', 'green');
         } else {
-            $('#defenseStatusC').text('Click to repair').css('color', 'red');
+            $('#shieldStatusC').text('Repairing').css('color', 'red');
         }
-        let healthC = $('#healthC');
-        let shieldC = $('#shieldC');
-        let defenseStatusC = $('#defenseStatusC');
-        let weaponStatusC = $('#weaponStatusC');
+        if (computer.weapon === 1) {
+            $('#weaponStatusC').text('Functioning').css('color', 'green');
+        } else {
+            $('#weaponStatusC').text('Repairing').css('color', 'red');
+        }
+        if (computer.defense === 1) {
+            $('#defenseStatusC').text('Functioning').css('color', 'green');
+        } else {
+            $('#defenseStatusC').text('Repairing').css('color', 'red');
+        }
 
-
-        // REPAIR FUNCTIONS
+        // REPAIR FUNCTIONS  --- PLAYER ==========================
         $('#defenseStatusP').on('click', (event) => {
             // need to find a way to countdown before fixing
             player.defense = 2;
             playerTimeStopDef = ticker;
         });
         const elapsedTimeD = ticker - playerTimeStopDef;
-        if (elapsedTimeD > 30) {
+        if (elapsedTimeD > 20 && playerTimeStopDef !== 0) {
             player.defense = 1;
+            playerTimeStopDef = 0;
         }
 
 
         $('#weaponStatusP').on('click', (event) => {
             player.weapon = 2;
             playerTimeStopWea = ticker;
+
         })
         const elapsedTimeW = ticker - playerTimeStopWea;
-        if (elapsedTimeW > 40) {
+        if (elapsedTimeW > 30 && playerTimeStopWea !== 0) {
             player.weapon = 1;
+            playerTimerStopWea = 0;
         }
 
         $('#shieldStatusP').on('click', (event) => {
@@ -421,30 +416,50 @@ $(() => {
             }
         })
         const elapsedTimeS = ticker - playerTimeStopShi;
-        if (elapsedTimeS > 30) {
-            player.sp = 100;
+        if (elapsedTimeS > 20 && playerTimeStopShi !== 0) {
+            player.sp = 50;
+            playerTimeStopShi = 0;
+
+        }
+        // REPAIR FUNCTIONS -- COMPUTER ==============================
+        if (computer.weapon === 0 && ticker % 60 === 0) {
+            computer.weapon = 1;
+        }
+        if (computer.defense === 0 && ticker % 60 === 0) {
+            computer.defense = 1;
+        }
+        if (computer.sp < 1 && ticker % 60 === 0) {
+            computer.sp = 50;
         }
 
+        // pause
 
+        $('#pauseGame').on('click', () => {
+            clearTimeout(timeoutID);
+        })
         // start of game.
+
+
         weaponTriggerC();
         weaponTriggerP();
         // recursive function, outcomes
         var timeoutID;
-        timeoutID = setTimeout(render, 100);
+        timeoutID = setTimeout(render, 30);
         if (computer.hp < 1 | player.hp < 1) {
             if (computer.hp > 0) {
+                player.hp = 0;
                 console.log('You lost...');
             } else if (player.hp > 0) {
+                computer.hp = 0;
                 console.log('You won!!');
             }
             clearTimeout(timeoutID);
         }
 
     }
-
-    render();
+    $('#startGame').on('click', render);
 })
 
-$();
 
+
+$();
