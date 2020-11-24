@@ -1,14 +1,88 @@
+body {
+    background: azure;
+    border: 1px solid black;
+}
 div {
-    border: 1px solid grey;
+    
+}
+#wrapper {
+    display: flex;
+    flex-direction: row;
 }
 
 #container {
     display: grid;
     grid-template-columns: repeat(25, 1fr);
     grid-template-rows: repeat(25,1fr);
-    width: 700px;
-    height: 500px;;
+    width: 900px;
+    height: 450px;;
     margin: 0 auto;
     text-align: center;
+    border: 1px solid black;
+}
+#right-container {
+    display: flex;
+    flex-direction: column;
+}
+#left-container {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    background: rgb(62, 82, 155);
+    color: rgb(238, 245, 210);
+}
+#botConsole {
+    height: 220px;
+    width: 500px;
+    border: 1px solid black;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
+button {
+    margin: 10px 5px;
+    height: 50px;
+}
+#startGame {
+    background: red;
+}
+#pauseGame {
+    background: yellow;
+}
+
+p h3 {
+    word-wrap: break-word;
+    margin: 0 5px;
+}
+
+.descriptions {
+    font-size: 14px;
+    margin: 0 5px 10px 5px;
+}
+.mainIntro {
+    font-size: 17px;
+    border: 1px solid black;
+}
+.scrolltext {
+    border: 0.5px solid grey;
+    font-size: 15px;
+}
+#weaponStatusC {
+    border: 1px solid black;
+}
+#defenseStatusC {
+    border: 1px solid black;
+}
+#shieldStatusC {
+    border: 1px solid black;
+}
+#weaponStatusP {
+    border: 1px solid black;
+}
+#defenseStatusP {
+    border: 1px solid black;
+}
+#shieldStatusP {
+    border: 1px solid black;
+}

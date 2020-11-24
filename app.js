@@ -4,16 +4,9 @@ var ticker = 0;
 var playerTimeStopDef = 0;
 var playerTimeStopShi = 0;
 var playerTimeStopWea = 0;
+var overdriveTime = 0;
 // =====================================controllers======================================
-const outcome = () => {
-    if (player.hp < 1 && computer.hp < 1) {
-        console.log("It's a draw! But you died anyway. GAME OVER...");
-    } else if (player.hp > 0 && computer.hp < 1) {
-        console.log("Good job Captain! You are victorious!");
-    } else if (player.hp < 1 && computer.hp > 0) {
-        console.log("Game over... You lost.");
-    }
-}
+
 // random module damage =================================================================
 const shieldOnMalfunctionChance = 5;
 const shieldOffMalfunctionChance = 2;
@@ -34,8 +27,20 @@ const randomModifier = (d) => {
     const finalDamage = lowestDamage + Math.floor(Math.random() * (deviation + 1));
     return finalDamage;
 }
+const whatToDamage = (a, PorC) => {
+    if (a === 0) {
+        PorC.sp = 0;
+        console.log('0');
+    } else if (a === 1) {
+        PorC.weapon = 0;
+        console.log('1');
+    } else if (a === 2) {
+        PorC.defense = 0;
+        console.log('2');
+    }
+}
 
-// ==================================PLAYER STATS==========================================
+// ==================================STATS==========================================
 // weapon/defense --> 1 = working, 0 = not working.
 const player = {
     'hp': 100,
@@ -45,8 +50,23 @@ const player = {
     'defense': 1,
     'damage': 20
 }
-
-
+const computer = {
+    'hp': 100,
+    'sp': 100,
+    'shield': 1,
+    'weapon': 1,
+    'defense': 1,
+    'damage': 20
+}
+// information log =========================================================================================
+const msg = $('<div>').appendTo($('#botConsole')).attr('class', 'scrolltext');
+const damageInflicted = (a) => {
+    msg.text('You inflicted ' + a + 'damage');
+}
+const atkMissed = () => {
+    msg.text('Your attack missed');
+}
+// ======================== PLAYER =================================================
 // higher defenseRating --> harder to hit. value 1 == 100% hit rate.
 const defenseRatingP = 3;
 const fireWeaponP = () => {
@@ -54,45 +74,33 @@ const fireWeaponP = () => {
         if (computer.sp > 0) {
             PdamageSP = randomModifier(player.damage)
             computer.sp -= PdamageSP;
+            damageInflicted(PdamageSP);
             const malIndex = malfunctionChance(shieldOnMalfunctionChance);
             const modIndex = moduleMalfunctionChance();
             if (malIndex === 0) {
-                if (modIndex === 0) {
-                    computer.sp = 0;
-                } else if (modIndex === 1) {
-                    computer.weapon = 0;
-                } else if (modIndex === 2) {
-                    computer.defense = 0;
-                }
+                whatToDamage(modIndex, computer);
             }
-            console.log(computer);
         } else {
             PdamageHP = randomModifier(player.damage);
             computer.hp -= PdamageHP;
+            damageInflicted(PdamageSP);
             const malIndex = malfunctionChance(shieldOffMalfunctionChance);
-            modIndex = moduleMalfunctionChance();
+            const modIndex = moduleMalfunctionChance();
             if (malIndex === 0) {
-                if (modIndex === 0) {
-                    computer.sp = 0;
-                } else if (modIndex === 1) {
-                    computer.weapon = 0;
-                } else if (modIndex === 2) {
-                    computer.defense = 0;
-                }
+                whatToDamage(modIndex, computer);
             }
-            console.log(computer);
+
         }
     } else {
+        atkMissed();
         console.log('Attack missed');
         console.log(computer);
     }
 }
 const weaponTriggerP = () => {
-    if (ticker % 20 === 0) {
+    if (ticker % 25 === 0) {
         if (player.weapon === 1) {
             fireWeaponP();
-        } else {
-            console.log('Weapon module is down! Repair it to fire your weapons,');
         }
     }
 }
@@ -106,15 +114,10 @@ const defenseModC = () => {
     }
 }
 
+
+
 // ===========================COMPUTER STATS ===============================================
-const computer = {
-    'hp': 100,
-    'sp': 100,
-    'shield': 1,
-    'weapon': 1,
-    'defense': 1,
-    'damage': 20
-}
+
 // higher defenseRating --> harder to hit. value 1 == 100% hit rate.
 const defenseRatingC = 3;
 const fireWeaponC = () => {
@@ -124,14 +127,8 @@ const fireWeaponC = () => {
             player.sp -= damageSP;
             const malIndex = malfunctionChance(shieldOnMalfunctionChance);
             const modIndex = moduleMalfunctionChance();
-            if (malfunctionChance(shieldOnMalfunctionChance) === 0) {
-                if (modIndex === 0) {
-                    player.sp = 0;
-                } else if (modIndex === 1) {
-                    player.weapon = 0;
-                } else if (modIndex === 2) {
-                    player.defense = 0;
-                }
+            if (malIndex === 0) {
+                whatToDamage(modIndex, player);
             }
             console.log(player);
         } else {
@@ -140,13 +137,7 @@ const fireWeaponC = () => {
             const malIndex = malfunctionChance(shieldOffMalfunctionChance);
             const modIndex = moduleMalfunctionChance();
             if (malIndex === 0) {
-                if (modIndex === 0) {
-                    player.sp = 0;
-                } else if (modIndex === 1) {
-                    player.weapon = 0;
-                } else if (modIndex === 2) {
-                    player.defense = 0;
-                }
+                whatToDamage(modIndex, player);
             }
             console.log(player);
         }
@@ -156,7 +147,7 @@ const fireWeaponC = () => {
     }
 }
 const weaponTriggerC = () => {
-    if (ticker % 25 === 0) {
+    if (ticker % 30 === 0) {
         if (computer.weapon === 1) {
             fireWeaponC();
         } else {
@@ -177,7 +168,30 @@ const defenseModP = () => {
 }
 
 
+
 $(() => {
+    // special abilities buttons
+    $('#overdrive').on('click', () => {
+        overdriveTime = ticker;
+        player.damage += 40;
+        $('#overdrive').hide();
+        console.log(player.damage);
+    })
+    $('#sabotage').on('click', () => {
+        const modIndex = moduleMalfunctionChance();
+        whatToDamage(modIndex, computer);
+        $('#sabotage').hide();
+    })
+    $('#shieldRecharge').on('click', () => {
+        player.sp = 100;
+        $('#shieldRecharge').hide();
+    })
+    $('#refresh').on('click', () => {
+        $('.abilities').show();
+        $('#refresh').hide();
+    })
+    
+
     const staticRender = () => {
         // STATIC RENDER ========================================================================================
         // grids id = x1y1 e.g. 
@@ -227,7 +241,7 @@ $(() => {
         for (let x = 16; x < 18; x++) {
             $('#x' + x + 'y13').css('background', 'white');
         }
-        
+
 
 
 
@@ -257,11 +271,11 @@ $(() => {
     const render = () => {
         ticker += 1; // global time ticker
 
-        const statusValueP = Object.values(player);
+        /* const statusValueP = Object.values(player);
         for (let i = 0; i < statusValueP.length; i++) {
             const items = 19 + i;
             $('#x3y' + items).text(statusValueP[i]).css('border', '1px solid black');
-        }
+        } */
         // hp bar
 
         for (let x = 4; x < 9; x++) {
@@ -319,6 +333,9 @@ $(() => {
         } else {
             $('#defenseStatusP').text('Click to repair').css('color', 'red');
         }
+        $('<div>').appendTo('#container')
+            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 24)
+            .text(player.damage);
 
         // shield status
         if (player.sp > 0) {
@@ -330,11 +347,11 @@ $(() => {
 
         // status bars for computer ==========================================================
 
-        const statusValueC = Object.values(computer);
+        /* const statusValueC = Object.values(computer);
         for (let i = 0; i < statusValueC.length; i++) {
             const items = 19 + i;
             $('#x19y' + items).text(statusValueC[i]).css('border', '1px solid black');
-        }
+        } */
         // hp bar
         for (let x = 20; x < 25; x++) {
             $('#x' + x + 'y19').remove();
@@ -344,6 +361,11 @@ $(() => {
             $('#x' + x + 'y20').remove();
         }
         // shield status
+        if (computer.sp > 0) {
+            computer.shield = 1;
+        } else if (computer.sp < 1 && computer.shield !== 2) {
+            computer.shield = 0;
+        }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
             .attr('id', 'shieldStatusC').css('font-size', '15px');
@@ -384,6 +406,9 @@ $(() => {
         } else {
             $('#defenseStatusC').text('Repairing').css('color', 'red');
         }
+        $('<div>').appendTo('#container')
+            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 24)
+            .text(computer.damage);
 
         // REPAIR FUNCTIONS  --- PLAYER ==========================
         $('#defenseStatusP').on('click', (event) => {
@@ -422,13 +447,13 @@ $(() => {
 
         }
         // REPAIR FUNCTIONS -- COMPUTER ==============================
-        if (computer.weapon === 0 && ticker % 60 === 0) {
+        if (computer.weapon === 0 && ticker % 80 === 0) {
             computer.weapon = 1;
         }
-        if (computer.defense === 0 && ticker % 60 === 0) {
+        if (computer.defense === 0 && ticker % 80 === 0) {
             computer.defense = 1;
         }
-        if (computer.sp < 1 && ticker % 60 === 0) {
+        if (computer.sp < 1 && ticker % 65 === 0) {
             computer.sp = 50;
         }
 
@@ -437,6 +462,17 @@ $(() => {
         $('#pauseGame').on('click', () => {
             clearTimeout(timeoutID);
         })
+
+        // Overdrive timer
+        const elapsedOverDrive = ticker - overdriveTime;
+        if (overdriveTime !== 0 && elapsedOverDrive === 100) {
+            player.damage = 15;
+            overdriveTime = 0;
+        }
+
+
+
+
         // start of game.
 
 
