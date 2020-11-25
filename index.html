@@ -1,91 +1,39 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Alternate-ftl by brongh</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Alternate-ftl</h1>
-      <h2 class="project-tagline">project 1 for sei-26.</h2>
-      <a href="https://git.generalassemb.ly/brongh/Alternate-FTL" class="btn">View on GitHub</a>
-    </section>
+<html>
 
-    <section class="main-content">
-      <h1>
-<a id="alternate-ftl" class="anchor" href="#alternate-ftl" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alternate-FTL</h1>
-<p>project 1 for sei-26.</p>
-<p>Alternate FTL</p>
-<p>Idea -&gt; Two spaceships shooting at each other. One is controlled by player, the other by computer.
-How to play -&gt;
--version 1: Use your mouse to click on different rooms to repair them when you are hit (% chance to damage a room at random).</p>
-<pre><code>*Weapons will fire automatically at enemy everytime cooldown is over or when its room is not damaged.
+<head>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</head>
 
-*Shield will overload, requiring player to reactivate it (takes a few seconds to recharge).
+<body>
+    <div id='wrapper'>
+        <div id='left-container'>
+            <button id='pauseGame'>Pause</button>
+            <button id='startGame'>Start/Resume Game</button>
+            <div class='mainIntro'>
+                <h3>Special Abilities</h3>
+                <p>Only work once. Do not click them more than once.</p>
+            </div>
+            <button class='abilities' id='refresh'>Refresh Abilities</button>
+            <div class='descriptions'>Refreshes all other abilities once.</div>
+            <button class='abilities' id='overdrive'>Weapon Overdrive</button>
+            <div class='descriptions'>Increases damage by 40</div>
+            <button class='abilities' id='sabotage'>Sabotage</button>
+            <div class='descriptions'>Sabotage one of your enemy's modules (shield, weapon, defense) at random.</div>
+            <button class='abilities' id='shieldRecharge'>Full Shield Recharge</button>
+            <div class='descriptions'>Grants a full recharge of your shield.</div>
+        </div>
+        <div id='right-container'>
+            <div id="container">
+            </div>
+            <div id="botConsole">
+                
+            </div>
+        </div>
+    </div>
+</body>
 
-*Defense module will intercept enemy fire (% chance to intercept).
-Hull Status will indicate health of the ship. If it reaches zero. player loses.
-
-MAYBE*** --&gt; can target fire a certain of the enemy ship, so that the player can take out a particular module of the enemy spaceship.
-</code></pre>
-<p>How computer plays -&gt;
--version 1: Computer will automatically repair its over modules. similar functions to player's spaceship.</p>
-<p>How to begin making the game -&gt;</p>
-<ol>
-<li>Core functions</li>
-</ol>
-<ul>
-<li>Statements to indicate Hull Points (HP) and Shield Points (SP).</li>
-<li>Functions to fire weapon ---&gt; timeset to hit target. Chance to hit/miss. timeset for cooldown to fire again.</li>
-<li>Functions to take damage ---&gt; if shield on, reduce SP, else reduce HP ++ % chance to damage a random module. Damaged modules will stop functioning.</li>
-<li>Functions to repair different module (or rooms). Should take a few seconds to repair. Can only repair one room at a time. Modules will only function again once it is repaired. Cool down will go back to full.</li>
-<li>Functions for Defense module --&gt; % chance to intercept enemy fire. If damaged, will not intercept.</li>
-</ul>
-<p>MVP</p>
-<ul>
-<li>
-<p>Stage 1
--&gt; Get Weapons to work first. Then two spaceships will start shooting at each other mindlessly.</p>
-</li>
-<li>
-<p>Stage 2
--&gt; Get Shields to work. If it works, two spaceships with shields will start shooting at each other.</p>
-</li>
-<li>
-<p>Stage 3
--&gt; Get Defense mods to work, so not all attacks will hit its target.</p>
-</li>
-<li>
-<p>Stage 4
--&gt; Get damaged status online. Meaning: damaged modules wouldn't work.</p>
-</li>
-<li>
-<p>Stage 5
--&gt; Get repair function online. So players would actually be able to do something.</p>
-</li>
-</ul>
-<p>Progress</p>
-<ul>
-<li>Stage 1 - completed</li>
-<li>Stage 2 - completed</li>
-<li>stage 3 - completed</li>
-<li>stage 4 - completed</li>
-<li>additional functions --&gt; added random damage modifier to randomise damage dealt. e.g. 100 damge +/- 20%.</li>
-</ul>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://git.generalassemb.ly/brongh/Alternate-FTL">Alternate-ftl</a> is maintained by <a href="https://git.generalassemb.ly/brongh">brongh</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
-  </body>
 </html>

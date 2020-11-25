@@ -1,6 +1,7 @@
 body {
-    background: azure;
+    color: black;
     border: 1px solid black;
+    
 }
 div {
     
@@ -8,6 +9,7 @@ div {
 #wrapper {
     display: flex;
     flex-direction: row;
+    background: rgba(255,255,255,0.2);
 }
 
 #container {
@@ -70,6 +72,7 @@ p h3 {
 }
 #weaponStatusC {
     border: 1px solid black;
+    z-index: 1;
 }
 #defenseStatusC {
     border: 1px solid black;

@@ -5,6 +5,7 @@ var playerTimeStopDef = 0;
 var playerTimeStopShi = 0;
 var playerTimeStopWea = 0;
 var overdriveTime = 0;
+const computerRepairTime = 200;
 // =====================================controllers======================================
 
 // random module damage =================================================================
@@ -193,6 +194,7 @@ $(() => {
     
 
     const staticRender = () => {
+        // ===================================================================================================
         // STATIC RENDER ========================================================================================
         // grids id = x1y1 e.g. 
         for (let y = 1; y < 26; y++) {
@@ -210,16 +212,16 @@ $(() => {
             }
         }
         for (let x = 4; x < 11; x++) {
-            $('#x' + x + 'y3').css('background', 'white');
+            $('#x' + x + 'y3').css('background', 'white').css('opacity', 0.2);
         }
         for (let x = 4; x < 11; x++) {
-            $('#x' + x + 'y14').css('background', 'white');
+            $('#x' + x + 'y14').css('background', 'white').css('opacity', 0.2);
         }
         for (let x = 9; x < 11; x++) {
-            $('#x' + x + 'y4').css('background', 'white');
+            $('#x' + x + 'y4').css('background', 'white').css('opacity', 0.2);
         }
         for (let x = 9; x < 11; x++) {
-            $('#x' + x + 'y13').css('background', 'white');
+            $('#x' + x + 'y13').css('background', 'white').css('opacity', 0.2);
         }
 
 
@@ -230,16 +232,16 @@ $(() => {
             }
         }
         for (let x = 16; x < 23; x++) {
-            $('#x' + x + 'y3').css('background', 'white');
+            $('#x' + x + 'y3').css('background', 'white').css('opacity', 0.2);
         }
         for (let x = 16; x < 23; x++) {
-            $('#x' + x + 'y14').css('background', 'white');
+            $('#x' + x + 'y14').css('background', 'white').css('opacity', 0.2);
         }
         for (let x = 16; x < 18; x++) {
-            $('#x' + x + 'y4').css('background', 'white');
+            $('#x' + x + 'y4').css('background', 'white').css('opacity', 0.2);
         }
         for (let x = 16; x < 18; x++) {
-            $('#x' + x + 'y13').css('background', 'white');
+            $('#x' + x + 'y13').css('background', 'white').css('opacity', 0.2);
         }
 
 
@@ -266,7 +268,7 @@ $(() => {
 
     staticRender();
 
-
+    //====================================================================================
     // DYNAMIC RENDER =====================================================================
     const render = () => {
         ticker += 1; // global time ticker
@@ -279,7 +281,7 @@ $(() => {
         // hp bar
 
         for (let x = 4; x < 9; x++) {
-            $('#x' + x + 'y19').remove();
+            $('#x' + x + 'y19').css('background', 'white').css('opacity', 0.2);
         }
         $('<progress>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 19)
@@ -297,7 +299,7 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 21)
-            .attr('id', 'shieldStatusP').css('font-size', '15px');
+            .attr('id', 'shieldStatusP').css('font-size', '18px');
         if (player.shield === 1) {
             $('#shieldStatusP').text('Functioning').css('color', 'green');
         } else if (player.shield === 2) {
@@ -311,7 +313,7 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 22)
-            .attr('id', 'weaponStatusP').css('font-size', '15px');
+            .attr('id', 'weaponStatusP').css('font-size', '18px');
         if (player.weapon === 1) {
             $('#weaponStatusP').text('Functioning').css('color', 'green');
         } else if (player.weapon === 2) {
@@ -325,7 +327,7 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 23)
-            .attr('id', 'defenseStatusP').css('font-size', '15px');
+            .attr('id', 'defenseStatusP').css('font-size', '18px');
         if (player.defense === 1) {
             $('#defenseStatusP').text('Functioning').css('color', 'green');
         } else if (player.defense === 2) {
@@ -335,7 +337,7 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 24)
-            .text(player.damage);
+            .text(player.damage).css('font-size', '18px');
 
         // shield status
         if (player.sp > 0) {
@@ -368,7 +370,7 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
-            .attr('id', 'shieldStatusC').css('font-size', '15px');
+            .attr('id', 'shieldStatusC').css('font-size', '18px');
 
         // weapon bar
         for (let x = 20; x < 25; x++) {
@@ -376,7 +378,7 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 22)
-            .attr('id', 'weaponStatusC').css('font-size', '15px');
+            .attr('id', 'weaponStatusC').css('font-size', '18px');
 
         //defense bar
         for (let x = 20; x < 25; x++) {
@@ -384,7 +386,7 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 23)
-            .attr('id', 'defenseStatusC').css('font-size', '15px');
+            .attr('id', 'defenseStatusC').css('font-size', '18px');
         $('<progress>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 19)
             .attr('value', computer.hp).attr('max', 100).attr('id', 'healthC');
@@ -408,7 +410,7 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 24)
-            .text(computer.damage);
+            .text(computer.damage).css('font-size', '18px');
 
         // REPAIR FUNCTIONS  --- PLAYER ==========================
         $('#defenseStatusP').on('click', (event) => {
@@ -447,13 +449,13 @@ $(() => {
 
         }
         // REPAIR FUNCTIONS -- COMPUTER ==============================
-        if (computer.weapon === 0 && ticker % 80 === 0) {
+        if (computer.weapon === 0 && ticker % computerRepairTime === 0) {
             computer.weapon = 1;
         }
-        if (computer.defense === 0 && ticker % 80 === 0) {
+        if (computer.defense === 0 && ticker % computerRepairTime === 0) {
             computer.defense = 1;
         }
-        if (computer.sp < 1 && ticker % 65 === 0) {
+        if (computer.sp < 1 && ticker % computerRepairTime === 0) {
             computer.sp = 50;
         }
 
