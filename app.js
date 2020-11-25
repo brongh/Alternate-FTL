@@ -5,41 +5,8 @@ var playerTimeStopDef = 0;
 var playerTimeStopShi = 0;
 var playerTimeStopWea = 0;
 var overdriveTime = 0;
-const computerRepairTime = 200;
-// =====================================controllers======================================
-
-// random module damage =================================================================
-const shieldOnMalfunctionChance = 5;
-const shieldOffMalfunctionChance = 2;
-module = ['sp', 'shield', 'defense'];
-const malfunctionChance = (n) => {
-    const chance = Math.floor(Math.random() * n);
-    return chance;
-}
-const moduleMalfunctionChance = () => {
-    const chance = Math.floor(Math.random() * module.length);
-    return chance;
-}
-
-// damage modifier ======================================================================
-const randomModifier = (d) => {
-    const deviation = 2 * d * 0.2;
-    const lowestDamage = 0.8 * d;
-    const finalDamage = lowestDamage + Math.floor(Math.random() * (deviation + 1));
-    return finalDamage;
-}
-const whatToDamage = (a, PorC) => {
-    if (a === 0) {
-        PorC.sp = 0;
-        console.log('0');
-    } else if (a === 1) {
-        PorC.weapon = 0;
-        console.log('1');
-    } else if (a === 2) {
-        PorC.defense = 0;
-        console.log('2');
-    }
-}
+var playerLaserTicker = 0;
+var computerLaserTicker = 0;
 
 // ==================================STATS==========================================
 // weapon/defense --> 1 = working, 0 = not working.
@@ -59,237 +26,249 @@ const computer = {
     'defense': 1,
     'damage': 20
 }
-// information log =========================================================================================
-const msg = $('<div>').appendTo($('#botConsole')).attr('class', 'scrolltext');
-const damageInflicted = (a) => {
-    msg.text('You inflicted ' + a + 'damage');
-}
-const atkMissed = () => {
-    msg.text('Your attack missed');
-}
-// ======================== PLAYER =================================================
-// higher defenseRating --> harder to hit. value 1 == 100% hit rate.
-const defenseRatingP = 3;
-const fireWeaponP = () => {
-    if (defenseModC() === 0) {
-        if (computer.sp > 0) {
-            PdamageSP = randomModifier(player.damage)
-            computer.sp -= PdamageSP;
-            damageInflicted(PdamageSP);
-            const malIndex = malfunctionChance(shieldOnMalfunctionChance);
-            const modIndex = moduleMalfunctionChance();
-            if (malIndex === 0) {
-                whatToDamage(modIndex, computer);
-            }
-        } else {
-            PdamageHP = randomModifier(player.damage);
-            computer.hp -= PdamageHP;
-            damageInflicted(PdamageSP);
-            const malIndex = malfunctionChance(shieldOffMalfunctionChance);
-            const modIndex = moduleMalfunctionChance();
-            if (malIndex === 0) {
-                whatToDamage(modIndex, computer);
-            }
 
-        }
-    } else {
-        atkMissed();
-        console.log('Attack missed');
-        console.log(computer);
-    }
-}
-const weaponTriggerP = () => {
-    if (ticker % 25 === 0) {
-        if (player.weapon === 1) {
-            fireWeaponP();
-        }
-    }
-}
-// probability of hitting computer
-const defenseModC = () => {
-    if (computer.defense === 1) {
-        const hitIndexC = Math.floor(Math.random() * defenseRatingC);
-        return hitIndexC;
-    } else {
-        return 0;
-    }
-}
-
-
-
-// ===========================COMPUTER STATS ===============================================
-
-// higher defenseRating --> harder to hit. value 1 == 100% hit rate.
-const defenseRatingC = 3;
-const fireWeaponC = () => {
-    if (defenseModP() === 0) {
-        if (player.sp > 0) {
-            damageSP = randomModifier(computer.damage);
-            player.sp -= damageSP;
-            const malIndex = malfunctionChance(shieldOnMalfunctionChance);
-            const modIndex = moduleMalfunctionChance();
-            if (malIndex === 0) {
-                whatToDamage(modIndex, player);
-            }
-            console.log(player);
-        } else {
-            damageHP = randomModifier(computer.damage);
-            player.hp -= damageHP;
-            const malIndex = malfunctionChance(shieldOffMalfunctionChance);
-            const modIndex = moduleMalfunctionChance();
-            if (malIndex === 0) {
-                whatToDamage(modIndex, player);
-            }
-            console.log(player);
-        }
-    } else {
-        console.log("Computer's attack intercepted!");
-        console.log(player);
-    }
-}
-const weaponTriggerC = () => {
-    if (ticker % 30 === 0) {
-        if (computer.weapon === 1) {
-            fireWeaponC();
-        } else {
-            console.log("Enemy's weapons are down!");
-        }
-    }
-}
-
-
-// probability of hitting player
-const defenseModP = () => {
-    if (player.defense === 1) {
-        const hitIndexP = Math.floor(Math.random() * defenseRatingP);
-        return hitIndexP;
-    } else {
-        return 0;
-    }
-}
-
-
-
+const computerRepairTime = 200;
+const overDriveDuration = 120;
 $(() => {
+    // =====================================controllers======================================
+
+    // random module damage =================================================================
+    const shieldOnMalfunctionChance = 5;
+    const shieldOffMalfunctionChance = 2;
+    module = ['sp', 'shield', 'defense'];
+    const malfunctionChance = (n) => {
+        const chance = Math.floor(Math.random() * n);
+        return chance;
+    }
+    const moduleMalfunctionChance = () => {
+        const chance = Math.floor(Math.random() * module.length);
+        return chance;
+    }
+
+    // damage modifier ======================================================================
+    const randomModifier = (d) => {
+        const deviation = 2 * d * 0.2;
+        const lowestDamage = 0.8 * d;
+        const finalDamage = lowestDamage + Math.floor(Math.random() * (deviation + 1));
+        return finalDamage;
+    }
+    const whatToDamage = (a, PorC) => {
+        if (a === 0) {
+            PorC.sp = 0;
+            console.log('0');
+        } else if (a === 1) {
+            PorC.weapon = 0;
+            console.log('1');
+        } else if (a === 2) {
+            PorC.defense = 0;
+            console.log('2');
+        }
+    }
+    // information log =========================================================================================
+    //const msg = $('<p>').appendTo($('#botConsole')).attr('class', 'scrolltext');
+    const textS = $('<p>').attr('class', 'scrolltext');
+    const damageInflicted = (a) => {
+        const msg = textS.text('You inflicted ' + a + 'damage');
+        $('#botConsole').prepend(msg);
+    }
+    const atkMissed = () => {
+        const msg = textS.text('Your attack missed');
+        $('#botConsole').prepend(msg);
+    }
+    // probability of hitting player
+    const defenseModP = () => {
+        if (player.defense === 1) {
+            const hitIndexP = Math.floor(Math.random() * defenseRatingP);
+            return hitIndexP;
+        } else {
+            return 0;
+        }
+    }
+    // ======================== PLAYER =================================================
+    // higher defenseRating --> harder to hit. value 1 == 100% hit rate.
+    const defenseRatingP = 3;
+    const fireWeaponP = () => {
+        if (defenseModC() === 0) {
+            if (computer.sp > 0) {
+                PdamageSP = randomModifier(player.damage)
+                computer.sp -= PdamageSP;
+                showGreenBeam();
+                damageInflicted(PdamageSP);
+                const malIndex = malfunctionChance(shieldOnMalfunctionChance);
+                const modIndex = moduleMalfunctionChance();
+                if (malIndex === 0) {
+                    whatToDamage(modIndex, computer);
+                }
+            } else {
+                PdamageHP = randomModifier(player.damage);
+                computer.hp -= PdamageHP;
+                showGreenBeam();
+                damageInflicted(PdamageSP);
+                const malIndex = malfunctionChance(shieldOffMalfunctionChance);
+                const modIndex = moduleMalfunctionChance();
+                if (malIndex === 0) {
+                    whatToDamage(modIndex, computer);
+                }
+
+            }
+        } else {
+            atkMissed();
+            console.log('Attack missed');
+            console.log(computer);
+        }
+    }
+    const weaponTriggerP = () => {
+        if (ticker % 25 === 0) {
+            if (player.weapon === 1) {
+                fireWeaponP();
+            }
+        }
+    }
+    // probability of hitting computer
+    const defenseModC = () => {
+        if (computer.defense === 1) {
+            const hitIndexC = Math.floor(Math.random() * defenseRatingC);
+            return hitIndexC;
+        } else {
+            return 0;
+        }
+    }
+    // ===========================COMPUTER STATS ===============================================
+
+    // higher defenseRating --> harder to hit. value 1 == 100% hit rate.
+    const defenseRatingC = 3;
+    const fireWeaponC = () => {
+        if (defenseModP() === 0) {
+            if (player.sp > 0) {
+                damageSP = randomModifier(computer.damage);
+                player.sp -= damageSP;
+                showRedBeam();
+                const malIndex = malfunctionChance(shieldOnMalfunctionChance);
+                const modIndex = moduleMalfunctionChance();
+                if (malIndex === 0) {
+                    whatToDamage(modIndex, player);
+                }
+                console.log(player);
+            } else {
+                damageHP = randomModifier(computer.damage);
+                player.hp -= damageHP;
+                showRedBeam();
+                const malIndex = malfunctionChance(shieldOffMalfunctionChance);
+                const modIndex = moduleMalfunctionChance();
+                if (malIndex === 0) {
+                    whatToDamage(modIndex, player);
+                }
+                console.log(player);
+            }
+        } else {
+            console.log("Computer's attack intercepted!");
+            console.log(player);
+        }
+    }
+    const weaponTriggerC = () => {
+        if (ticker % 30 === 0) {
+            if (computer.weapon === 1) {
+                fireWeaponC();
+            } else {
+                console.log("Enemy's weapons are down!");
+            }
+        }
+    }
+    // laser beams start from column 7 end 17
+    const showGreenBeam = () => {
+        $('#greenbeam').show();
+        playerLaserTicker = ticker;
+    }
+    const hideGreenBeam = () => {
+        $('#greenbeam').hide();
+    }
+    const showRedBeam = () => {
+        $('#redbeam').show();
+        computerLaserTicker = ticker;
+    }
+    const hideRedBeam = () => {
+        $('#redbeam').hide();
+    }
     // special abilities buttons
     $('#overdrive').on('click', () => {
         overdriveTime = ticker;
         player.damage += 40;
         $('#overdrive').hide();
-        console.log(player.damage);
+        $('#overdrive1').hide();
     })
     $('#sabotage').on('click', () => {
         const modIndex = moduleMalfunctionChance();
         whatToDamage(modIndex, computer);
         $('#sabotage').hide();
+        $('#sabotage1').hide();
     })
     $('#shieldRecharge').on('click', () => {
         player.sp = 100;
         $('#shieldRecharge').hide();
+        $('#shieldRecharge1').hide();
     })
     $('#refresh').on('click', () => {
         $('.abilities').show();
         $('#refresh').hide();
+        $('#refresh1').hide();
     })
+    // ===================================================================================================
+    // STATIC RENDER ========================================================================================
+    $('<div>').text('PLAYER').css('font-size','30px').css('color','green').css('font-weight','bold')
+    .css('grid-column-start', 1).css('grid-column-end', 4).css('grid-row-start', 1)
+    .css('grid-row-end', 2).appendTo('#container');
+    // laser and explosion effects
+    $('<img>').attr('src', 'img/explosion0.png')
+        .css('width', '50px').css('height', '50px')
+        .css('position', 'absolute').css('right', '35%').appendTo($('#greenbeam'));
+    $('<img>').attr('src', 'img/littlegreenbeam.png')
+        .css('width', '600px').css('height', '20px').appendTo($('#greenbeam'));
+    $('#greenbeam').appendTo('#container').css('grid-column-start', 7)
+        .css('grid-column-end', 13).css('grid-row', 5).hide();
+    $('<img>').attr('src', 'img/explosion0.png')
+        .css('width', '50px').css('height', '50px')
+        .css('position', 'absolute').css('left', '32%').appendTo($('#redbeam'));
+    $('<img>').attr('src', 'img/littleredbeam.png')
+        .css('width', '600px').css('height', '20px').appendTo($('#redbeam'));
+    $('#redbeam').appendTo('#container').css('grid-column-start', 3)
+        .css('grid-column-end', 10).css('grid-row', 9).hide();
+    // =====================================================================================================
+    // separator for spaceships and status
+    /* for (let x = 1; x < 26; x++) {
+        $('#x' + x + 'y17').css('background', 'black').text('');
+    } */
+    // hp sp bar for player ================================================================
     
-
-    const staticRender = () => {
-        // ===================================================================================================
-        // STATIC RENDER ========================================================================================
-        // grids id = x1y1 e.g. 
-        for (let y = 1; y < 26; y++) {
-            for (let x = 1; x < 26; x++) {
-                $('<div>').appendTo($('#container'))
-                    .attr('id', 'x' + x + 'y' + y)
-                    //.text(x + '.' + y)
-                    .css('grid-column', x).css('grid-row', y);
-            }
-        }
-        //spaceship player
-        for (let x = 2; x < 11; x++) {
-            for (let y = 3; y < 15; y++) {
-                $('#x' + x + 'y' + y).css('background', 'grey').text('');
-            }
-        }
-        for (let x = 4; x < 11; x++) {
-            $('#x' + x + 'y3').css('background', 'white').css('opacity', 0.2);
-        }
-        for (let x = 4; x < 11; x++) {
-            $('#x' + x + 'y14').css('background', 'white').css('opacity', 0.2);
-        }
-        for (let x = 9; x < 11; x++) {
-            $('#x' + x + 'y4').css('background', 'white').css('opacity', 0.2);
-        }
-        for (let x = 9; x < 11; x++) {
-            $('#x' + x + 'y13').css('background', 'white').css('opacity', 0.2);
-        }
-
-
-        // spaceship computer
-        for (let x = 16; x < 25; x++) {
-            for (let y = 3; y < 15; y++) {
-                $('#x' + x + 'y' + y).css('background', 'grey').text('');
-            }
-        }
-        for (let x = 16; x < 23; x++) {
-            $('#x' + x + 'y3').css('background', 'white').css('opacity', 0.2);
-        }
-        for (let x = 16; x < 23; x++) {
-            $('#x' + x + 'y14').css('background', 'white').css('opacity', 0.2);
-        }
-        for (let x = 16; x < 18; x++) {
-            $('#x' + x + 'y4').css('background', 'white').css('opacity', 0.2);
-        }
-        for (let x = 16; x < 18; x++) {
-            $('#x' + x + 'y13').css('background', 'white').css('opacity', 0.2);
-        }
-
-
-
-
-        // =====================================================================================================
-        // separator for spaceships and status
-        for (let x = 1; x < 26; x++) {
-            $('#x' + x + 'y17').css('background', 'black').text('');
-        }
-        // hp sp bar for player ================================================================
-
-        const statusP = Object.keys(player);
-        for (let i = 0; i < statusP.length; i++) {
-            const items = 19 + i;
-            $('#x2y' + items).text(statusP[i]).css('border', '1px solid black');
-        }
-        const statusC = Object.keys(computer);
-        for (let i = 0; i < statusC.length; i++) {
-            const items = 19 + i;
-            $('#x18y' + items).text(statusC[i]).css('border', '1px solid black');
-        }
+    const statusP = Object.keys(player);
+    for (let i = 0; i < statusP.length; i++) {
+        const items = 19 + i;
+        $('<div>').text(statusP[i]).css('border', '1px solid black')
+            .css('grid-column', 3).css('grid-row', items).appendTo('#container');
     }
-
-    staticRender();
-
+    const statusC = Object.keys(computer);
+    for (let i = 0; i < statusC.length; i++) {
+        const items = 19 + i;
+        $('<div>').text(statusC[i]).css('border', '1px solid black')
+            .css('grid-column', 19).css('grid-row', items).appendTo('#container');
+    }
     //====================================================================================
     // DYNAMIC RENDER =====================================================================
     const render = () => {
         ticker += 1; // global time ticker
-
-        /* const statusValueP = Object.values(player);
-        for (let i = 0; i < statusValueP.length; i++) {
-            const items = 19 + i;
-            $('#x3y' + items).text(statusValueP[i]).css('border', '1px solid black');
-        } */
-        // hp bar
-
-        for (let x = 4; x < 9; x++) {
-            $('#x' + x + 'y19').css('background', 'white').css('opacity', 0.2);
+        // player laser
+        const elapsedTimeLaserP = ticker - playerLaserTicker;
+        if (elapsedTimeLaserP > 10 && playerLaserTicker !== 0) {
+            hideGreenBeam();
         }
+        const elapsedTimeLaserC = ticker - computerLaserTicker;
+        if (elapsedTimeLaserC > 10 && computerLaserTicker !== 0) {
+            hideRedBeam();
+        }
+        // hp bar
         $('<progress>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 19)
             .attr('value', player.hp).attr('max', 100).attr('id', 'healthP');
         // sp bar
-        for (let x = 4; x < 9; x++) {
-            $('#x' + x + 'y20').remove();
-        }
         $('<progress>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 20)
             .attr('value', player.sp).attr('max', 100).attr('id', 'shieldP');
@@ -337,8 +316,8 @@ $(() => {
         }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 24)
-            .text(player.damage).css('font-size', '18px');
-
+            .text('').css('font-size', '18px').attr('id', 'playerDamageStats');
+        $('#playerDamageStats').text(player.damage);
         // shield status
         if (player.sp > 0) {
             player.shield = 1;
@@ -349,19 +328,6 @@ $(() => {
 
         // status bars for computer ==========================================================
 
-        /* const statusValueC = Object.values(computer);
-        for (let i = 0; i < statusValueC.length; i++) {
-            const items = 19 + i;
-            $('#x19y' + items).text(statusValueC[i]).css('border', '1px solid black');
-        } */
-        // hp bar
-        for (let x = 20; x < 25; x++) {
-            $('#x' + x + 'y19').remove();
-        }
-        // sp bar
-        for (let x = 20; x < 25; x++) {
-            $('#x' + x + 'y20').remove();
-        }
         // shield status
         if (computer.sp > 0) {
             computer.shield = 1;
@@ -373,17 +339,11 @@ $(() => {
             .attr('id', 'shieldStatusC').css('font-size', '18px');
 
         // weapon bar
-        for (let x = 20; x < 25; x++) {
-            $('#x' + x + 'y21').remove();
-        }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 22)
             .attr('id', 'weaponStatusC').css('font-size', '18px');
 
         //defense bar
-        for (let x = 20; x < 25; x++) {
-            $('#x' + x + 'y22').remove();
-        }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 23)
             .attr('id', 'defenseStatusC').css('font-size', '18px');
@@ -467,10 +427,12 @@ $(() => {
 
         // Overdrive timer
         const elapsedOverDrive = ticker - overdriveTime;
-        if (overdriveTime !== 0 && elapsedOverDrive === 100) {
+        if (overdriveTime !== 0 && elapsedOverDrive === overDriveDuration) {
             player.damage = 15;
             overdriveTime = 0;
         }
+
+        // not working
 
 
 
@@ -484,18 +446,21 @@ $(() => {
         var timeoutID;
         timeoutID = setTimeout(render, 30);
         if (computer.hp < 1 | player.hp < 1) {
-            if (computer.hp > 0) {
-                player.hp = 0;
-                console.log('You lost...');
-            } else if (player.hp > 0) {
-                computer.hp = 0;
-                console.log('You won!!');
+            if (computer.hp < 1 | player.hp < 1) {
+                if (computer.hp > 0) {
+                    alert('You lost');
+                } else if (player.hp > 0) {
+                    alert('You won');
+                }
             }
             clearTimeout(timeoutID);
         }
-
     }
+
+
+
     $('#startGame').on('click', render);
+
 })
 
 

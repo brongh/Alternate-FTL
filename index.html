@@ -18,19 +18,48 @@
                 <p>Only work once. Do not click them more than once.</p>
             </div>
             <button class='abilities' id='refresh'>Refresh Abilities</button>
-            <div class='descriptions'>Refreshes all other abilities once.</div>
+            <div class='descriptions' id='refresh1'>Refreshes all other abilities once.</div>
             <button class='abilities' id='overdrive'>Weapon Overdrive</button>
-            <div class='descriptions'>Increases damage by 40</div>
+            <div class='descriptions' id='overdrive1'>Increases damage by 40</div>
             <button class='abilities' id='sabotage'>Sabotage</button>
-            <div class='descriptions'>Sabotage one of your enemy's modules (shield, weapon, defense) at random.</div>
+            <div class='descriptions' id='sabotage1'>Sabotage one of your enemy's modules (shield, weapon, defense) at
+                random.</div>
             <button class='abilities' id='shieldRecharge'>Full Shield Recharge</button>
-            <div class='descriptions'>Grants a full recharge of your shield.</div>
+            <div class='descriptions' id='shieldRecharge1'>Grants a full recharge of your shield.</div>
         </div>
         <div id='right-container'>
             <div id="container">
+                <div id='left-ship'>
+                    <img src='img/warrior1.png' id='playerShip'>
+                </div>
+                <div id='greenbeam'>
+                </div>
+                <div id='redbeam'>
+                </div>
+                <div id='right-ship'>
+                    <img src="img/tribase-u3-d0.png" id='enemyShip'>
+                </div>
             </div>
             <div id="botConsole">
-                
+
+            </div>
+
+        </div>
+        <div id='instructions'>
+            <div>
+                <h2>Instructions</h2>
+            </div>
+            <div class='instruct'>
+                <p class='g'>hp = Hull Points. When your hp reaches zero, you lose.
+                    <br /></br>sp = Shield Points. When your sp reaches zero. Repair your 'shield' and restore to 50 sp.
+                <br /></br>shield = When functioning, prevents damage to hp.
+                <br /><br /> weapon = Allows your ship to fire automatically at your enemy when functioning. Click to repair.
+                <br /><br /> defense = Your ship's defensive system. Will intercept enemy fire. Higher block chance when shield is functioning. 100% hit chance by enemy when defense is down.
+                <br /><br /> damage = Amount of damage your ship can inflict on enemy.
+                <br /><br /> <span id='emp'>OBJECTIVE</span>
+                <br /><br /> Repair your modules by clicking on the 'Click to repair' word when it appears.
+                <br /><br /> Keep your ship alive and destroy your enemy!
+                </p>
             </div>
         </div>
     </div>

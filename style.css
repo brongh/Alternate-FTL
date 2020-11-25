@@ -1,7 +1,6 @@
 body {
     color: black;
-    border: 1px solid black;
-    
+    background-image: url(img/space.jpg);
 }
 div {
     
@@ -9,9 +8,15 @@ div {
 #wrapper {
     display: flex;
     flex-direction: row;
-    background: rgba(255,255,255,0.2);
 }
-
+#instructions {
+    background: rgba(0, 0, 0, 0.8);
+    height: 670px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 #container {
     display: grid;
     grid-template-columns: repeat(25, 1fr);
@@ -21,30 +26,37 @@ div {
     margin: 0 auto;
     text-align: center;
     border: 1px solid black;
+    background: rgba(255,255,255,0.4);
+    font-size: 20px;
 }
 #right-container {
     display: flex;
     flex-direction: column;
+    
 }
 #left-container {
     display: flex;
     flex-direction: column;
     width: 300px;
-    background: rgb(62, 82, 155);
+    background: rgba(62, 82, 155, 0.8);
     color: rgb(238, 245, 210);
 }
 #botConsole {
     height: 220px;
-    width: 500px;
+    width: 900px;
     border: 1px solid black;
     overflow: auto;
     display: flex;
     flex-direction: column;
+    background: grey;
+    align-items: center;
 }
 
 button {
-    margin: 10px 5px;
+    margin: 10px auto;
     height: 50px;
+    width: 250px;
+    border-radius: 100px;
 }
 #startGame {
     background: red;
@@ -56,36 +68,84 @@ button {
 p h3 {
     word-wrap: break-word;
     margin: 0 5px;
+    
 }
 
 .descriptions {
     font-size: 14px;
     margin: 0 5px 10px 5px;
+    padding: 0 25px;
 }
 .mainIntro {
     font-size: 17px;
-    border: 1px solid black;
+    padding: 0px 25px;
 }
 .scrolltext {
     border: 0.5px solid grey;
-    font-size: 15px;
+    font-size: 30px;
 }
 #weaponStatusC {
     border: 1px solid black;
     z-index: 1;
+    font-weight: bold;
 }
 #defenseStatusC {
     border: 1px solid black;
+    font-weight: bold;
 }
 #shieldStatusC {
     border: 1px solid black;
+    font-weight: bold;
 }
 #weaponStatusP {
     border: 1px solid black;
+    font-weight: bold;
 }
 #defenseStatusP {
     border: 1px solid black;
+    font-weight: bold;
 }
 #shieldStatusP {
     border: 1px solid black;
+    font-weight: bold;
+}
+#right-ship {
+    grid-column-start: 16;
+    grid-column-end: 25;
+    grid-row-start: 3;
+    grid-row-end: 15;
+}
+#enemyShip {
+    height: 200px;
+    width: 200px;
+}
+#left-ship {
+    grid-column-start: 2;
+    grid-column-end: 11;
+    grid-row-start: 3;
+    grid-row-end: 15;
+}
+#playerShip {
+    height: 180px;
+    width: 180px;
+}
+#greenbeam {
+    z-index: 1;
+    width: 200px;
+    height: 15px;
+    
+}
+h2 {
+    color: white;
+
+}
+.instruct {
+    padding: 0 20px;
+}
+.g {
+    color: white;
+}
+#emp {
+    font-size: 20px;
+    
 }
