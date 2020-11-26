@@ -62,7 +62,6 @@ $(() => {
         } else if (target.is('#hard')) {
             computerStatsHard();
         }
-        
     })
     // random module damage =================================================================
     const shieldOnMalfunctionChance = 5;
@@ -404,14 +403,18 @@ $(() => {
             if (computer.hp < 1 | player.hp < 1) {
                 if (computer.hp > 0) {
                     alert('You lost');
-                    $('#reload').css('visibility','visible');
+                    $end();
                 } else if (player.hp > 0) {
                     alert('You won');
-                    $('#reload').css('visibility','visible');
+                    $end();
                 }
             }
             clearTimeout(timeoutID);
         }
+    }
+    const $end = () => {
+        $('#reload').css('visibility','visible');
+        $('#endgame').css('visibility','visible');
     }
     $('#startGame').on('click', render);
     $('#reload').on('click', () => {

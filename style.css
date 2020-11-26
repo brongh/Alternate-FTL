@@ -9,6 +9,7 @@ div {
 #wrapper {
     display: flex;
     flex-direction: row;
+    position: relative;
 }
 #instructions {
     background: rgba(0, 0, 0, 0.8);
@@ -236,15 +237,25 @@ h2 {
     grid-row: 24;
 }
 #reload {
-    grid-column: 12/13;
-    grid-row: 20/24;
-    width: 100px;
-    height: 100px;
+    grid-column: 12/15;
+    grid-row: 18/24;
+    width: 130px;
+    height: 130px;
     background: blue;
     color: white;
-    border: 2px solid black;
+    border: 2px solid white;
     visibility: hidden;
+    font-size: 25px;
+    z-index: 1;
 }
 .difficulty {
     align-self: flex-end;
+}
+#endgame {
+    background: rgba(255,255,255,0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+    visibility: hidden;
 }
