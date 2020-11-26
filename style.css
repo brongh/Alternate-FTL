@@ -1,5 +1,6 @@
 body {
     color: black;
+    font-family: Helvetica, sans-serif;
     background-image: url(img/space.jpg);
 }
 div {
@@ -26,7 +27,7 @@ div {
     margin: 0 auto;
     text-align: center;
     border: 1px solid black;
-    background: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.5);
     font-size: 20px;
 }
 #right-container {
@@ -38,7 +39,7 @@ div {
     display: flex;
     flex-direction: column;
     width: 300px;
-    background: rgba(62, 82, 155, 0.8);
+    background: rgba(0, 0, 0, 0.8);
     color: rgb(238, 245, 210);
 }
 #botConsole {
@@ -57,12 +58,26 @@ button {
     height: 50px;
     width: 250px;
     border-radius: 100px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    background: rgb(177, 177, 177);
+    border: 2px solid blue;
 }
 #startGame {
-    background: red;
+    border: 6px solid green;
+    background: black;
+    color: rgb(45, 186, 45);
+    font-size: 18px;
+    width: 220px;
+    font-family: 'Orbitron', sans-serif;
 }
 #pauseGame {
-    background: yellow;
+    border: 6px solid red;
+    background: black;
+    color: red;
+    font-size: 18px;
+    width: 220px;
+    font-family: 'Orbitron', sans-serif;
 }
 
 p h3 {
@@ -147,5 +162,9 @@ h2 {
 }
 #emp {
     font-size: 20px;
-    
+
+}
+.statusNames {
+    background: rgba(255,255,255,0.6);
+    margin: 1px 0;
 }

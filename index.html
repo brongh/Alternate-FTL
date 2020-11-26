@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.5.1.js"
         integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
@@ -12,7 +14,7 @@
     <div id='wrapper'>
         <div id='left-container'>
             <button id='pauseGame'>Pause</button>
-            <button id='startGame'>Start/Resume Game</button>
+            <button id='startGame'>Start/Resume</button>
             <div class='mainIntro'>
                 <h3>Special Abilities</h3>
                 <p>Only work once. Do not click them more than once.</p>
@@ -52,13 +54,15 @@
             <div class='instruct'>
                 <p class='g'>hp = Hull Points. When your hp reaches zero, you lose.
                     <br /></br>sp = Shield Points. When your sp reaches zero. Repair your 'shield' and restore to 50 sp.
-                <br /></br>shield = When functioning, prevents damage to hp.
-                <br /><br /> weapon = Allows your ship to fire automatically at your enemy when functioning. Click to repair.
-                <br /><br /> defense = Your ship's defensive system. Will intercept enemy fire. Higher block chance when shield is functioning. 100% hit chance by enemy when defense is down.
-                <br /><br /> damage = Amount of damage your ship can inflict on enemy.
-                <br /><br /> <span id='emp'>OBJECTIVE</span>
-                <br /><br /> Repair your modules by clicking on the 'Click to repair' word when it appears.
-                <br /><br /> Keep your ship alive and destroy your enemy!
+                    <br /></br>shield = When functioning, prevents damage to hp.
+                    <br /><br /> weapon = Allows your ship to fire automatically at your enemy when functioning. Click
+                    to repair.
+                    <br /><br /> defense = Your ship's defensive system. Will intercept enemy fire. Higher block chance
+                    when shield is functioning. 100% hit chance by enemy when defense is down.
+                    <br /><br /> damage = Amount of damage your ship can inflict on enemy.
+                    <br /><br /> <span id='emp'>OBJECTIVE</span>
+                    <br /><br /> Repair your modules by clicking on the 'Click to repair' word when it appears.
+                    <br /><br /> Keep your ship alive and destroy your enemy!
                 </p>
             </div>
         </div>

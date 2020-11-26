@@ -214,9 +214,9 @@ $(() => {
     })
     // ===================================================================================================
     // STATIC RENDER ========================================================================================
-    $('<div>').text('PLAYER').css('font-size','30px').css('color','green').css('font-weight','bold')
-    .css('grid-column-start', 1).css('grid-column-end', 4).css('grid-row-start', 1)
-    .css('grid-row-end', 2).appendTo('#container');
+    $('<div>').text('PLAYER').css('font-size', '30px').css('color', 'green').css('font-weight', 'bold')
+        .css('grid-column-start', 1).css('grid-column-end', 4).css('grid-row-start', 1)
+        .css('grid-row-end', 2).appendTo('#container').css('font-family', 'Orbitron')
     // laser and explosion effects
     $('<img>').attr('src', 'img/explosion0.png')
         .css('width', '50px').css('height', '50px')
@@ -238,18 +238,20 @@ $(() => {
         $('#x' + x + 'y17').css('background', 'black').text('');
     } */
     // hp sp bar for player ================================================================
-    
+
     const statusP = Object.keys(player);
     for (let i = 0; i < statusP.length; i++) {
         const items = 19 + i;
         $('<div>').text(statusP[i]).css('border', '1px solid black')
-            .css('grid-column', 3).css('grid-row', items).appendTo('#container');
+            .css('grid-column', 3).css('grid-row', items)
+            .attr('class', 'statusNames').appendTo('#container');
     }
     const statusC = Object.keys(computer);
     for (let i = 0; i < statusC.length; i++) {
         const items = 19 + i;
         $('<div>').text(statusC[i]).css('border', '1px solid black')
-            .css('grid-column', 19).css('grid-row', items).appendTo('#container');
+            .css('grid-column', 19).css('grid-row', items)
+            .attr('class', 'statusNames').appendTo('#container');
     }
     //====================================================================================
     // DYNAMIC RENDER =====================================================================
@@ -279,61 +281,51 @@ $(() => {
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 21)
             .attr('id', 'shieldStatusP').css('font-size', '18px');
-        if (player.shield === 1) {
-            $('#shieldStatusP').text('Functioning').css('color', 'green');
-        } else if (player.shield === 2) {
-            $('#shieldStatusP').text('Repairing').css('color', 'yellow');
-        } else {
-            $('#shieldStatusP').text('Click to repair').css('color', 'red');
-        }
+        
         // weapon bar
-        for (let x = 4; x < 9; x++) {
-            $('#x' + x + 'y21').remove();
-        }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 22)
             .attr('id', 'weaponStatusP').css('font-size', '18px');
-        if (player.weapon === 1) {
-            $('#weaponStatusP').text('Functioning').css('color', 'green');
-        } else if (player.weapon === 2) {
-            $('#weaponStatusP').text('Repairing').css('color', 'yellow');
-        } else {
-            $('#weaponStatusP').text('Click to repair').css('color', 'red');
-        }
         //defense bar
-        for (let x = 4; x < 9; x++) {
-            $('#x' + x + 'y22').remove();
-        }
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 23)
             .attr('id', 'defenseStatusP').css('font-size', '18px');
-        if (player.defense === 1) {
-            $('#defenseStatusP').text('Functioning').css('color', 'green');
-        } else if (player.defense === 2) {
-            $('#defenseStatusP').text('Repairing').css('color', 'yellow');
-        } else {
-            $('#defenseStatusP').text('Click to repair').css('color', 'red');
+        //status update
+        const statusFuncP = (a, b) => {
+            if (a === 1) {
+                $(b).text('Functioning').css('color', 'green');
+            } else if (player.shield === 2) {
+                $(b).text('Repairing').css('color', 'yellow');
+            } else {
+                $(b).text('Click to repair').css('color', 'red');
+            }
         }
+        statusFuncP(player.shield,  '#shieldStatusP');
+        statusFuncP(player.weapon, '#weaponStatusP');
+        statusFuncP(player.defense, '#defenseStatusP');
         $('<div>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 24)
             .text('').css('font-size', '18px').attr('id', 'playerDamageStats');
         $('#playerDamageStats').text(player.damage);
         // shield status
-        if (player.sp > 0) {
+        /* if (player.sp > 0) {
             player.shield = 1;
         } else if (player.sp < 1 && player.shield !== 2) {
             player.shield = 0;
+        } */
+        const shieldCheck = (a) => {
+            if (a.sp > 0) {
+                a.shield = 1;
+            } else if (a.sp < 1 && a.shield !== 2) {
+                a.shield = 0;
+            }
         }
-
+        shieldCheck(player);
 
         // status bars for computer ==========================================================
 
         // shield status
-        if (computer.sp > 0) {
-            computer.shield = 1;
-        } else if (computer.sp < 1 && computer.shield !== 2) {
-            computer.shield = 0;
-        }
+        shieldCheck(computer);
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
             .attr('id', 'shieldStatusC').css('font-size', '18px');
@@ -353,21 +345,17 @@ $(() => {
         $('<progress>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 20)
             .attr('value', computer.sp).attr('max', 100).attr('id', 'shieldC');
-        if (computer.shield === 1) {
-            $('#shieldStatusC').text('Functioning').css('color', 'green');
-        } else {
-            $('#shieldStatusC').text('Repairing').css('color', 'red');
+        const statusFunc = (a, b) => {
+            if (a === 1) {
+                $(b).text('Functioning').css('color', 'green');
+            } else {
+                $(b).text('Repairing').css('color', 'red');
+            }
         }
-        if (computer.weapon === 1) {
-            $('#weaponStatusC').text('Functioning').css('color', 'green');
-        } else {
-            $('#weaponStatusC').text('Repairing').css('color', 'red');
-        }
-        if (computer.defense === 1) {
-            $('#defenseStatusC').text('Functioning').css('color', 'green');
-        } else {
-            $('#defenseStatusC').text('Repairing').css('color', 'red');
-        }
+        statusFunc(computer.shield, $('#shieldStatusC'));
+        statusFunc(computer.weapon, $('#weaponStatusC'));
+        statusFunc(computer.defense, $('#defenseStatusC'));
+
         $('<div>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 24)
             .text(computer.damage).css('font-size', '18px');
