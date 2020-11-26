@@ -35,8 +35,16 @@ div {
     flex-direction: column;
     
 }
-#left-container {
+#chooseDiff {
     display: flex;
+    flex-direction: column;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.8);
+    color: rgb(238, 245, 210);
+    align-items: center;
+}
+#left-container {
+    display: none;
     flex-direction: column;
     width: 300px;
     background: rgba(0, 0, 0, 0.8);
@@ -87,12 +95,12 @@ p h3 {
 }
 
 .descriptions {
-    font-size: 14px;
+    font-size: 12px;
     margin: 0 5px 10px 5px;
     padding: 0 25px;
 }
 .mainIntro {
-    font-size: 17px;
+    font-size: 12px;
     padding: 0px 25px;
 }
 .scrolltext {
@@ -101,28 +109,39 @@ p h3 {
 }
 #weaponStatusC {
     border: 1px solid black;
-    z-index: 1;
     font-weight: bold;
+    grid-column: 20/25;
+    grid-row: 22;
 }
 #defenseStatusC {
     border: 1px solid black;
     font-weight: bold;
+    grid-column: 20/25;
+    grid-row: 23;
 }
 #shieldStatusC {
     border: 1px solid black;
     font-weight: bold;
+    grid-column: 20/25;
+    grid-row: 21;
 }
 #weaponStatusP {
     border: 1px solid black;
     font-weight: bold;
+    grid-column: 4/9;
+    grid-row: 22;
 }
 #defenseStatusP {
     border: 1px solid black;
     font-weight: bold;
+    grid-column: 4/9;
+    grid-row: 23;
 }
 #shieldStatusP {
     border: 1px solid black;
     font-weight: bold;
+    grid-column: 4/9;
+    grid-row: 21;
 }
 #right-ship {
     grid-column-start: 16;
@@ -206,14 +225,26 @@ h2 {
 }
 .damageStats {
     border: 0.5px solid black;
+    font-size: 18px
 }
 #playerDamageStats {
-    grid-column: 4/8;
+    grid-column: 4/9;
     grid-row: 24;
-    font-size: 18px; 
 }
 #computerDamageStats {
-    grid-column: 20/24;
+    grid-column: 20/25;
     grid-row: 24;
-    font-size: 18px;
+}
+#reload {
+    grid-column: 12/13;
+    grid-row: 20/24;
+    width: 100px;
+    height: 100px;
+    background: blue;
+    color: white;
+    border: 2px solid black;
+    visibility: hidden;
+}
+.difficulty {
+    align-self: flex-end;
 }

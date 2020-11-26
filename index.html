@@ -12,6 +12,12 @@
 
 <body>
     <div id='wrapper'>
+        <div id='chooseDiff'>
+            <h1>Choose a difficulty</h1>
+            <button class='difficulty' id='ez'>Easy Mode</button>
+            <button class='difficulty' id='medium'>Intermediate</button>
+            <button class='difficulty' id='hard'>Hard</button>
+        </div>
         <div id='left-container'>
             <button id='pauseGame'>Pause</button>
             <button id='startGame'>Start/Resume</button>
@@ -28,6 +34,7 @@
                 random.</div>
             <button class='abilities' id='shieldRecharge'>Full Shield Recharge</button>
             <div class='descriptions' id='shieldRecharge1'>Grants a full recharge of your shield.</div>
+
         </div>
         <div id='right-container'>
             <div id="container">
@@ -46,8 +53,15 @@
                 <div id='right-ship'>
                     <img src="img/tribase-u3-d0.png" id='enemyShip'>
                 </div>
+                <div class='damageStats' id='shieldStatusP'></div>
+                <div class='damageStats' id='weaponStatusP'></div>
+                <div class='damageStats' id='defenseStatusP'></div>
                 <div class='damageStats' id='playerDamageStats'></div>
+                <div class='damageStats' id='shieldStatusC'></div>
+                <div class='damageStats' id='weaponStatusC'></div>
+                <div class='damageStats' id='defenseStatusC'></div>
                 <div class='damageStats' id='computerDamageStats'></div>
+                <button id='reload'>Restart</button>
             </div>
             <div id="botConsole">
 

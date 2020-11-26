@@ -28,14 +28,42 @@ const computer = {
     'damage': 20
 }
 
-const computerRepairTime = 160;
-const computerAtkSpd = 30;
+let computerRepairTime = 160;
+let computerAtkSpd = 40;
 const overDriveDuration = 150;
 const playerRepairTimer = 40;
 const playerAtkSpd = 30;
+
+const computerStatsEz = () => {
+    computer.damage = 20;
+    computerRepairTime = 160;
+    computerAtkSpd = 40;
+}
+const computerStatsMed = () => {
+    computer.damage = 30;
+    computerRepairTime = 140;
+    computerAtkSpd = 35;
+}
+const computerStatsHard = () => {
+    computer.damage = 45;
+    computerRepairTime = 120;
+    computerAtkSpd = 30;
+}
 $(() => {
     // =====================================controllers======================================
-
+    $('#ez, #medium, #hard').on('click', () => {
+        let target = $(event.target);
+        $('#chooseDiff').hide();
+        $('#left-container').css('display','flex');
+        if (target.is('#ez')) {
+            computerStatsEz();
+        } else if (target.is('#medium')) {
+            computerStatsMed();
+        } else if (target.is('#hard')) {
+            computerStatsHard();
+        }
+        
+    })
     // random module damage =================================================================
     const shieldOnMalfunctionChance = 5;
     const shieldOffMalfunctionChance = 2;
@@ -48,7 +76,7 @@ $(() => {
         const chance = Math.floor(Math.random() * module.length);
         return chance;
     }
-
+    
     // damage modifier ======================================================================
     const randomModifier = (d) => {
         const deviation = 2 * d * 0.2;
@@ -230,33 +258,6 @@ $(() => {
             .css('grid-column', 19).css('grid-row', items)
             .attr('class', 'statusNames').appendTo('#container');
     }
-
-    // shield status
-    $('<div>').appendTo('#container')
-        .css('grid-column-start', 4).css('grid-column-end', 9).css('grid-row', 21)
-        .attr('id', 'shieldStatusP').css('font-size', '18px');
-    // weapon bar
-    $('<div>').appendTo('#container')
-        .css('grid-column-start', 4).css('grid-column-end', 9).css('grid-row', 22)
-        .attr('id', 'weaponStatusP').css('font-size', '18px');
-    //defense bar
-    $('<div>').appendTo('#container')
-        .css('grid-column-start', 4).css('grid-column-end', 9).css('grid-row', 23)
-        .attr('id', 'defenseStatusP').css('font-size', '18px');
-
-    $('<div>').appendTo('#container')
-        .css('grid-column-start', 20).css('grid-column-end', 25).css('grid-row', 21)
-        .attr('id', 'shieldStatusC').css('font-size', '18px');
-
-    // weapon bar
-    $('<div>').appendTo('#container')
-        .css('grid-column-start', 20).css('grid-column-end', 25).css('grid-row', 22)
-        .attr('id', 'weaponStatusC').css('font-size', '18px');
-
-    //defense bar
-    $('<div>').appendTo('#container')
-        .css('grid-column-start', 20).css('grid-column-end', 25).css('grid-row', 23)
-        .attr('id', 'defenseStatusC').css('font-size', '18px');
     //====================================================================================
     // DYNAMIC RENDER =====================================================================
     const render = () => {
@@ -403,14 +404,20 @@ $(() => {
             if (computer.hp < 1 | player.hp < 1) {
                 if (computer.hp > 0) {
                     alert('You lost');
+                    $('#reload').css('visibility','visible');
                 } else if (player.hp > 0) {
                     alert('You won');
+                    $('#reload').css('visibility','visible');
                 }
             }
             clearTimeout(timeoutID);
         }
     }
     $('#startGame').on('click', render);
+    $('#reload').on('click', () => {
+        location.reload();
+    })
+
 })
 
 $();
