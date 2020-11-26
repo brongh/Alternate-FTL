@@ -7,6 +7,7 @@ var playerTimeStopWea = 0;
 var overdriveTime = 0;
 var playerLaserTicker = 0;
 var computerLaserTicker = 0;
+let clock = 0;
 
 // ==================================STATS==========================================
 // weapon/defense --> 1 = working, 0 = not working.
@@ -27,8 +28,11 @@ const computer = {
     'damage': 20
 }
 
-const computerRepairTime = 200;
-const overDriveDuration = 120;
+const computerRepairTime = 160;
+const computerAtkSpd = 30;
+const overDriveDuration = 150;
+const playerRepairTimer = 40;
+const playerAtkSpd = 30;
 $(() => {
     // =====================================controllers======================================
 
@@ -55,17 +59,13 @@ $(() => {
     const whatToDamage = (a, PorC) => {
         if (a === 0) {
             PorC.sp = 0;
-            console.log('0');
         } else if (a === 1) {
             PorC.weapon = 0;
-            console.log('1');
         } else if (a === 2) {
             PorC.defense = 0;
-            console.log('2');
         }
     }
     // information log =========================================================================================
-    //const msg = $('<p>').appendTo($('#botConsole')).attr('class', 'scrolltext');
     const textS = $('<p>').attr('class', 'scrolltext');
     const damageInflicted = (a) => {
         const msg = textS.text('You inflicted ' + a + 'damage');
@@ -113,12 +113,10 @@ $(() => {
             }
         } else {
             atkMissed();
-            console.log('Attack missed');
-            console.log(computer);
         }
     }
     const weaponTriggerP = () => {
-        if (ticker % 25 === 0) {
+        if (ticker % playerAtkSpd === 0) {
             if (player.weapon === 1) {
                 fireWeaponP();
             }
@@ -148,7 +146,6 @@ $(() => {
                 if (malIndex === 0) {
                     whatToDamage(modIndex, player);
                 }
-                console.log(player);
             } else {
                 damageHP = randomModifier(computer.damage);
                 player.hp -= damageHP;
@@ -158,36 +155,34 @@ $(() => {
                 if (malIndex === 0) {
                     whatToDamage(modIndex, player);
                 }
-                console.log(player);
             }
-        } else {
-            console.log("Computer's attack intercepted!");
-            console.log(player);
         }
     }
     const weaponTriggerC = () => {
-        if (ticker % 30 === 0) {
+        if (ticker % computerAtkSpd === 0) {
             if (computer.weapon === 1) {
                 fireWeaponC();
-            } else {
-                console.log("Enemy's weapons are down!");
             }
         }
     }
     // laser beams start from column 7 end 17
     const showGreenBeam = () => {
         $('#greenbeam').show();
+        $('#comExplode').show();
         playerLaserTicker = ticker;
     }
     const hideGreenBeam = () => {
         $('#greenbeam').hide();
+        $('#comExplode').hide();
     }
     const showRedBeam = () => {
         $('#redbeam').show();
+        $('#playExplode').show();
         computerLaserTicker = ticker;
     }
     const hideRedBeam = () => {
         $('#redbeam').hide();
+        $('#playExplode').hide();
     }
     // special abilities buttons
     $('#overdrive').on('click', () => {
@@ -214,29 +209,11 @@ $(() => {
     })
     // ===================================================================================================
     // STATIC RENDER ========================================================================================
-    $('<div>').text('PLAYER').css('font-size', '30px').css('color', 'green').css('font-weight', 'bold')
-        .css('grid-column-start', 1).css('grid-column-end', 4).css('grid-row-start', 1)
-        .css('grid-row-end', 2).appendTo('#container').css('font-family', 'Orbitron')
     // laser and explosion effects
-    $('<img>').attr('src', 'img/explosion0.png')
-        .css('width', '50px').css('height', '50px')
-        .css('position', 'absolute').css('right', '35%').appendTo($('#greenbeam'));
-    $('<img>').attr('src', 'img/littlegreenbeam.png')
-        .css('width', '600px').css('height', '20px').appendTo($('#greenbeam'));
-    $('#greenbeam').appendTo('#container').css('grid-column-start', 7)
-        .css('grid-column-end', 13).css('grid-row', 5).hide();
-    $('<img>').attr('src', 'img/explosion0.png')
-        .css('width', '50px').css('height', '50px')
-        .css('position', 'absolute').css('left', '32%').appendTo($('#redbeam'));
-    $('<img>').attr('src', 'img/littleredbeam.png')
-        .css('width', '600px').css('height', '20px').appendTo($('#redbeam'));
-    $('#redbeam').appendTo('#container').css('grid-column-start', 3)
-        .css('grid-column-end', 10).css('grid-row', 9).hide();
-    // =====================================================================================================
-    // separator for spaceships and status
-    /* for (let x = 1; x < 26; x++) {
-        $('#x' + x + 'y17').css('background', 'black').text('');
-    } */
+    $('#comExplode').hide();
+    $('#greenbeam').hide();
+    $('#playExplode').hide();
+    $('#redbeam').hide();
     // hp sp bar for player ================================================================
 
     const statusP = Object.keys(player);
@@ -253,10 +230,40 @@ $(() => {
             .css('grid-column', 19).css('grid-row', items)
             .attr('class', 'statusNames').appendTo('#container');
     }
+
+    // shield status
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 4).css('grid-column-end', 9).css('grid-row', 21)
+        .attr('id', 'shieldStatusP').css('font-size', '18px');
+    // weapon bar
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 4).css('grid-column-end', 9).css('grid-row', 22)
+        .attr('id', 'weaponStatusP').css('font-size', '18px');
+    //defense bar
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 4).css('grid-column-end', 9).css('grid-row', 23)
+        .attr('id', 'defenseStatusP').css('font-size', '18px');
+
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 20).css('grid-column-end', 25).css('grid-row', 21)
+        .attr('id', 'shieldStatusC').css('font-size', '18px');
+
+    // weapon bar
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 20).css('grid-column-end', 25).css('grid-row', 22)
+        .attr('id', 'weaponStatusC').css('font-size', '18px');
+
+    //defense bar
+    $('<div>').appendTo('#container')
+        .css('grid-column-start', 20).css('grid-column-end', 25).css('grid-row', 23)
+        .attr('id', 'defenseStatusC').css('font-size', '18px');
     //====================================================================================
     // DYNAMIC RENDER =====================================================================
     const render = () => {
         ticker += 1; // global time ticker
+        // game clock
+        $('<div>').appendTo($('#container')).css('grid-column-start', 13).css('grid-column-end', 15)
+            .css('grid-row', 1).css('background', 'black').css('color', 'white').text(clock);
         // player laser
         const elapsedTimeLaserP = ticker - playerLaserTicker;
         if (elapsedTimeLaserP > 10 && playerLaserTicker !== 0) {
@@ -274,45 +281,22 @@ $(() => {
         $('<progress>').appendTo('#container')
             .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 20)
             .attr('value', player.sp).attr('max', 100).attr('id', 'shieldP');
-        if (player.sp < 1) {
-            $('<div>').appendTo('#container')
-                .css('grid-column-start',)
-        }
-        $('<div>').appendTo('#container')
-            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 21)
-            .attr('id', 'shieldStatusP').css('font-size', '18px');
-        
-        // weapon bar
-        $('<div>').appendTo('#container')
-            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 22)
-            .attr('id', 'weaponStatusP').css('font-size', '18px');
-        //defense bar
-        $('<div>').appendTo('#container')
-            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 23)
-            .attr('id', 'defenseStatusP').css('font-size', '18px');
+
         //status update
         const statusFuncP = (a, b) => {
             if (a === 1) {
                 $(b).text('Functioning').css('color', 'green');
-            } else if (player.shield === 2) {
+            } else if (a === 2) {
                 $(b).text('Repairing').css('color', 'yellow');
             } else {
                 $(b).text('Click to repair').css('color', 'red');
             }
         }
-        statusFuncP(player.shield,  '#shieldStatusP');
+        statusFuncP(player.shield, '#shieldStatusP');
         statusFuncP(player.weapon, '#weaponStatusP');
         statusFuncP(player.defense, '#defenseStatusP');
-        $('<div>').appendTo('#container')
-            .css('grid-column-start', 4).css('grid-column-end', 8).css('grid-row', 24)
-            .text('').css('font-size', '18px').attr('id', 'playerDamageStats');
         $('#playerDamageStats').text(player.damage);
-        // shield status
-        /* if (player.sp > 0) {
-            player.shield = 1;
-        } else if (player.sp < 1 && player.shield !== 2) {
-            player.shield = 0;
-        } */
+
         const shieldCheck = (a) => {
             if (a.sp > 0) {
                 a.shield = 1;
@@ -326,19 +310,7 @@ $(() => {
 
         // shield status
         shieldCheck(computer);
-        $('<div>').appendTo('#container')
-            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 21)
-            .attr('id', 'shieldStatusC').css('font-size', '18px');
 
-        // weapon bar
-        $('<div>').appendTo('#container')
-            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 22)
-            .attr('id', 'weaponStatusC').css('font-size', '18px');
-
-        //defense bar
-        $('<div>').appendTo('#container')
-            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 23)
-            .attr('id', 'defenseStatusC').css('font-size', '18px');
         $('<progress>').appendTo('#container')
             .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 19)
             .attr('value', computer.hp).attr('max', 100).attr('id', 'healthC');
@@ -355,11 +327,7 @@ $(() => {
         statusFunc(computer.shield, $('#shieldStatusC'));
         statusFunc(computer.weapon, $('#weaponStatusC'));
         statusFunc(computer.defense, $('#defenseStatusC'));
-
-        $('<div>').appendTo('#container')
-            .css('grid-column-start', 20).css('grid-column-end', 24).css('grid-row', 24)
-            .text(computer.damage).css('font-size', '18px');
-
+        $('#computerDamageStats').text(computer.damage);
         // REPAIR FUNCTIONS  --- PLAYER ==========================
         $('#defenseStatusP').on('click', (event) => {
             // need to find a way to countdown before fixing
@@ -367,7 +335,7 @@ $(() => {
             playerTimeStopDef = ticker;
         });
         const elapsedTimeD = ticker - playerTimeStopDef;
-        if (elapsedTimeD > 20 && playerTimeStopDef !== 0) {
+        if (elapsedTimeD > playerRepairTimer && playerTimeStopDef !== 0) {
             player.defense = 1;
             playerTimeStopDef = 0;
         }
@@ -379,7 +347,7 @@ $(() => {
 
         })
         const elapsedTimeW = ticker - playerTimeStopWea;
-        if (elapsedTimeW > 30 && playerTimeStopWea !== 0) {
+        if (elapsedTimeW > playerRepairTimer && playerTimeStopWea !== 0) {
             player.weapon = 1;
             playerTimerStopWea = 0;
         }
@@ -391,7 +359,7 @@ $(() => {
             }
         })
         const elapsedTimeS = ticker - playerTimeStopShi;
-        if (elapsedTimeS > 20 && playerTimeStopShi !== 0) {
+        if (elapsedTimeS > playerRepairTimer && playerTimeStopShi !== 0) {
             player.sp = 50;
             playerTimeStopShi = 0;
 
@@ -407,7 +375,7 @@ $(() => {
             computer.sp = 50;
         }
 
-        // pause
+        // pause    
 
         $('#pauseGame').on('click', () => {
             clearTimeout(timeoutID);
@@ -419,20 +387,18 @@ $(() => {
             player.damage = 15;
             overdriveTime = 0;
         }
-
-        // not working
-
-
-
-
+        const $clock = () => {
+            clock += 1;
+        }
+        if (ticker % 30 === 0) {
+            $clock();
+        }
         // start of game.
-
-
         weaponTriggerC();
         weaponTriggerP();
         // recursive function, outcomes
         var timeoutID;
-        timeoutID = setTimeout(render, 30);
+        timeoutID = setTimeout(render, 33.33);
         if (computer.hp < 1 | player.hp < 1) {
             if (computer.hp < 1 | player.hp < 1) {
                 if (computer.hp > 0) {
@@ -444,13 +410,7 @@ $(() => {
             clearTimeout(timeoutID);
         }
     }
-
-
-
     $('#startGame').on('click', render);
-
 })
-
-
 
 $();

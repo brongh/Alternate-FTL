@@ -148,7 +148,15 @@ p h3 {
     z-index: 1;
     width: 200px;
     height: 15px;
-    
+    grid-column: 7/13;
+    grid-row: 5/6;
+}
+#redbeam {
+    z-index: 1;
+    width: 200px;
+    height: 15px;
+    grid-column: 3/10;
+    grid-row: 9/10;
 }
 h2 {
     color: white;
@@ -167,4 +175,45 @@ h2 {
 .statusNames {
     background: rgba(255,255,255,0.6);
     margin: 1px 0;
+}
+#player {
+    font-size: 30px;
+    color: green;
+    font-weight: bold;
+    grid-column: 1/4;
+    grid-row: 1/2;
+    font-weight: 'Orbitron';
+}
+#comExplode {
+    grid-column: 19/20;
+    grid-row: 5/6;
+    width: 40px;
+    height: 40px;
+    z-index: 1;
+}
+#playExplode {
+    grid-column: 6/7;
+    grid-row: 9/10;
+    z-index: 1;
+}
+.explode {
+    width: 40px;
+    height: 40px;
+}
+.beam {
+    width: 600px;
+    height: 15px;
+}
+.damageStats {
+    border: 0.5px solid black;
+}
+#playerDamageStats {
+    grid-column: 4/8;
+    grid-row: 24;
+    font-size: 18px; 
+}
+#computerDamageStats {
+    grid-column: 20/24;
+    grid-row: 24;
+    font-size: 18px;
 }
