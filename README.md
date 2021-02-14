@@ -1,3 +1,5 @@
+Project 1 at General Assembly. Tech Stack: jQuery, Javascript, HTML, CSS.
+
 Alternate FTL 
 
 Objective 
